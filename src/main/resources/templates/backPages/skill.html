@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>center</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/bootstrap/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/font-awesome/css/font-awesome.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/linearicons/style.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/main.css}" >
+    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/demo.css}">
+
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+    <link rel="apple-touch-icon" sizes="76x76"th:href="@{/pageResources/assets/img/apple-icon.png}" >
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/pageResources/assets/img/favicon.png}" >
+</head>
+<body>
+<div id="wrapper">
+    <!-- 顶部 -->
+    <div th:replace="commons/leftbar::topBar"></div>
+    <!-- 结束 顶部 -->
+    <!-- 左侧菜单 -->
+    <div id="sidebar-nav" class="sidebar" th:replace="commons/leftbar::sideBar(activeUrl='skill')">
+        <!--<div class="sidebar-scroll">-->
+            <!--<nav>-->
+                <!--<ul class="nav li-list">-->
+                    <!--<li><a href="/backPages/center.html?mode=1" class="active"><i class="lnr lnr-home"></i> <span>主页管理</span></a></li>-->
+                    <!--<li><a href="/backPages/skill.html?mode=2" class=""><i class="lnr lnr-home"></i> <span>技能管理</span></a></li>-->
+                    <!--<li><a href="/backPages/note.html?mode=3" class=""><i class="lnr lnr-home"></i> <span>笔记管理</span></a></li>-->
+                    <!--<li><a href="/backPages/diary.html?mode=4" class=""><i class="lnr lnr-home"></i> <span>随笔管理</span></a></li>-->
+                    <!--<li><a href="/backPages/center.html?mode=5" class=""><i class="lnr lnr-home"></i> <span>图片管理</span></a></li>-->
+                    <!--<li><a href="/backPages/center.html??mode=6" class=""><i class="lnr lnr-home"></i> <span>日迹管理</span></a></li>-->
+                <!--</ul>-->
+            <!--</nav>-->
+        <!--</div>-->
+    </div>
+    <!-- 结束 左侧菜单 -->
+
+    <div class="main">
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="container-fluid">
+                <h3 class="page-title">my Skills</h3>
+                <div class="panel panel-headline">
+                    <div class="panel-heading">
+                        <h3>技能栏介绍</h3>
+                        <p>使用手册</p>
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" class="form-control" placeholder="标题"><br>
+                        <textarea class="form-control" placeholder="内容" rows="4"></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="col-lg-offset-11">
+                            <button type="button" class="btn btn-success" >提交</button>
+                        </div>
+
+                    </div>
+                </div>
+                <form id="skill-form" class="form-horizontal">
+                    <div class="row" style="box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);background-color: #fff;margin-bottom: 30px;padding:20px 20px 20px 20px ">
+                        <div class="row" style="margin-bottom: 20px">
+                            <div class=" col-sm-2">
+                                <button type="button" class="btn btn-success add-panel" >添加</button>
+                                <button type="button" class="btn btn-danger" onclick="save()">保存</button>
+                            </div>
+                        </div>
+
+
+
+
+                        <div id="skill-row"class="row">
+                            <div class="col-lg-6" th:each="skillP : ${spList}">
+                                <div class="panel panel-headline">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">[[${skillP.name}]]</h3>
+                                        <div class="right">
+                                            <button type="button" class="add-panel-row lnr"><i class="lnr lnr-file-add"></i></button>
+                                            <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+                                            <button type="button" class="btn-remove remove-panel-button"><i class="lnr lnr-cross"></i></button>
+
+                                        </div>
+                                    </div>
+                                    <div class="panel-body ">
+                                        <input type="hidden" class="skill-p-id"th:value="${skillP.id}">
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label" >标题</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control skill-p-name" th:value="${skillP.name}"
+                                                       placeholder="标题">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">内容</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control skill-p-description" th:value="${skillP.description}"
+                                                          placeholder="内容"
+                                                          rows="4"></textarea>
+                                            </div>
+                                        </div>
+
+                                            <div class="form-group skill-s" th:each="skillSon : ${skillP.son}">
+                                                <input type="hidden" class="skill-s-id" th:value="${skillSon.id}">
+                                                <label class = "col-sm-2 control-label">子skill</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text"  class="form-control skill-s-name"
+                                                           th:value="${skillSon.name}"
+                                                           placeholder="标题">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text"  class="form-control skill-s-num"
+                                                           th:value="${skillSon.num}"
+                                                           placeholder="数值">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button type="button"
+                                                            class="btn btn-danger remove-panel-row">删除</button>
+                                                </div>
+                                            </div>
+
+
+
+                                        <!--<div class="form-group skill-s">-->
+                                            <!--<label class = "col-sm-2 control-label">子skill</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<input type="text"  class="form-control skill-s-name"-->
+                                                       <!--placeholder="标题">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<input type="text"  class="form-control skill-s-num"-->
+                                                       <!--placeholder="数值">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<button type="button"-->
+                                                        <!--class="btn btn-danger remove-panel-row">删除</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+
+
+                                        <!--<div class="form-group skill-s">-->
+                                            <!--<label class = "col-sm-2 control-label">子skill</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<input type="text"  class="form-control skill-s-name"-->
+                                                       <!--placeholder="标题">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<input type="text"  class="form-control skill-s-num"-->
+                                                       <!--placeholder="数值">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<button type="button"-->
+                                                        <!--class="btn btn-danger remove-panel-row">删除</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--<div class="col-lg-6">-->
+                                <!--<div class="panel panel-headline">-->
+                                    <!--<div class="panel-heading">-->
+                                        <!--<h3 class="panel-title">新建了一个skill分类</h3>-->
+                                        <!--<div class="right">-->
+                                            <!--<button type="button" class="add-panel-row lnr"><i class="lnr lnr-file-add"></i></button>-->
+                                            <!--<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>-->
+                                            <!--<button type="button" class="btn-remove remove-panel-button"><i class="lnr lnr-cross"></i></button>-->
+
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="panel-body ">-->
+                                        <!--<div class="form-group">-->
+                                            <!--<label  class="col-sm-2 control-label" >标题</label>-->
+                                            <!--<div class="col-sm-10">-->
+                                                <!--<input type="text" class="form-control skill-p-name"-->
+                                                       <!--placeholder="标题">-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="form-group">-->
+                                            <!--<label  class="col-sm-2 control-label">内容</label>-->
+                                            <!--<div class="col-sm-10">-->
+                                                <!--<textarea class="form-control skill-p-description"-->
+                                                          <!--placeholder="内容"-->
+                                                          <!--rows="4"></textarea>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+                                        <!--<div class="form-group skill-s">-->
+                                            <!--<label class = "col-sm-2 control-label">子skill</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<input type="text"  class="form-control skill-s-name"-->
+                                                       <!--placeholder="标题">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<input type="text"  class="form-control skill-s-num"-->
+                                                       <!--placeholder="数值">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<button type="button"-->
+                                                        <!--class="btn btn-danger remove-panel-row">删除</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+
+
+                                        <!--<div class="form-group skill-s">-->
+                                            <!--<label class = "col-sm-2 control-label">子skill</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<input type="text"  class="form-control skill-s-name"-->
+                                                       <!--placeholder="标题">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<input type="text"  class="form-control skill-s-num"-->
+                                                       <!--placeholder="数值">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<button type="button"-->
+                                                        <!--class="btn btn-danger remove-panel-row">删除</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+
+
+                                        <!--<div class="form-group skill-s">-->
+                                            <!--<label class = "col-sm-2 control-label">子skill</label>-->
+                                            <!--<div class="col-sm-6">-->
+                                                <!--<input type="text"  class="form-control skill-s-name"-->
+                                                       <!--placeholder="标题">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<input type="text"  class="form-control skill-s-num"-->
+                                                       <!--placeholder="数值">-->
+                                            <!--</div>-->
+                                            <!--<div class="col-sm-2">-->
+                                                <!--<button type="button"-->
+                                                        <!--class="btn btn-danger remove-panel-row">删除</button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+
+
+                                    <!--</div>-->
+
+                                <!--</div>-->
+                            <!--</div>-->
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Javascript -->
+<script th:src="@{/pageResources/assets/vendor/jquery/jquery.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/bootstrap/js/bootstrap.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}" ></script>
+<script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
+
+<script >
+    //删除单个panel响应事件
+    $('.main').on('click','.remove-panel-button',function () {
+        var button = $(this);
+        var panel = button.parents('.col-lg-4');
+        // alert(panel.html());
+        panel.remove();
+    })
+    //删除panel中子skill行响应事件
+    $('.main').on('click','.remove-panel-row',function () {
+        var button = $(this);
+        var row = button.parents('.form-group')
+        // alert(row.html());
+        row.remove();
+    })
+    $('.main').on('click','.remove-panel-button',function () {
+        var row = $(this).parents('.col-lg-6');
+        row.remove();
+
+    })
+    //添加panel中子skill行响应事件
+    $('.main').on('click','.add-panel-row',function () {
+        var button = $(this);
+        var row = "<div class=\"form-group skill-s\">\n" +
+            "                                                <label class = \"col-sm-2 control-label \">子skill</label>\n" +
+            "                                                <div class=\"col-sm-6\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-name\" placeholder=\"标题\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-num\" placeholder=\"数值\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <button type=\"button\" class=\"btn btn-danger remove-panel-row\">删除</button>\n" +
+            "                                                </div>\n" +
+            "                                            </div>"
+        // alert(row);
+        button.parents('.panel-headline').children('.panel-body').append(row);
+    })
+    //添加panel响应事件
+    $('.main').on('click','.add-panel',function () {
+        var button = $(this);
+        var row = "<div class=\"col-lg-6\">\n" +
+            "                                <div class=\"panel panel-headline\">\n" +
+            "                                    <div class=\"panel-heading\">\n" +
+            "                                        <h3 class=\"panel-title\">新建了一个skill分类</h3>\n" +
+            "                                        <div class=\"right\">\n" +
+            "                                            <button type=\"button\" class=\"add-panel-row lnr\"><i class=\"lnr lnr-file-add\"></i></button>\n" +
+            "                                            <button type=\"button\" class=\"btn-toggle-collapse\"><i class=\"lnr lnr-chevron-up\"></i></button>\n" +
+            "                                            <button type=\"button\" class=\"btn-remove remove-panel-button\"><i class=\"lnr lnr-cross\"></i></button>\n" +
+            "\n" +
+            "                                        </div>\n" +
+            "                                    </div>\n" +
+            "                                    <div class=\"panel-body \">\n" +
+            "                                        <div class=\"form-group\">\n" +
+            "                                            <label  class=\"col-sm-2 control-label \">标题</label>\n" +
+            "                                            <div class=\"col-sm-10\">\n" +
+            "                                                <input type=\"text\" class=\"form-control skill-p-name\" placeholder=\"标题\">\n" +
+            "                                            </div>\n" +
+            "                                        </div>\n" +
+            "                                        <div class=\"form-group\">\n" +
+            "                                            <label  class=\"col-sm-2 control-label\">内容</label>\n" +
+            "                                            <div class=\"col-sm-10\">\n" +
+            "                                                <textarea class=\"form-control skill-p-description\" placeholder=\"内容\" rows=\"4\"></textarea>\n" +
+            "                                            </div>\n" +
+            "                                        </div>\n" +
+            "\n" +
+            "                                            <div class=\"form-group skill-s\">\n" +
+            "                                                <label class = \"col-sm-2 control-label\">子skill</label>\n" +
+            "                                                <div class=\"col-sm-6\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-name\" placeholder=\"标题\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-num\" placeholder=\"数值\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <button type=\"button\" class=\"btn btn-danger remove-panel-row\">删除</button>\n" +
+            "                                                </div>\n" +
+            "                                            </div>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                                            <div class=\"form-group skill-s\">\n" +
+            "                                                <label class = \"col-sm-2 control-label\">子skill</label>\n" +
+            "                                                <div class=\"col-sm-6\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-name\" placeholder=\"标题\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-num\" placeholder=\"数值\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <button type=\"button\" class=\"btn btn-danger remove-panel-row\">删除</button>\n" +
+            "                                                </div>\n" +
+            "                                            </div>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                                            <div class=\"form-group skill-s\">\n" +
+            "                                                <label class = \"col-sm-2 control-label\">子skill</label>\n" +
+            "                                                <div class=\"col-sm-6\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-name\" placeholder=\"标题\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <input type=\"text\" class=\"form-control skill-s-num\" placeholder=\"数值\">\n" +
+            "                                                </div>\n" +
+            "                                                <div class=\"col-sm-2\">\n" +
+            "                                                    <button type=\"button\" class=\"btn btn-danger remove-panel-row\">删除</button>\n" +
+            "                                                </div>\n" +
+            "                                            </div>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                                    </div>\n" +
+            "\n" +
+            "                                </div>\n" +
+            "                            </div>"
+        // alert(button.parents('#skill-form').find('#skill-row').html());
+        button.parents('#skill-form').find('#skill-row').append(row);
+    })
+
+    function save() {
+        var mark=0;
+        $('#skill-row').find(' input').each(function (index,item) {
+            if(typeof($(item).val())=='undefined'||$(item).val()==''){
+                 mark=1;
+            }
+        })
+        if(mark==0){
+            var json="{";
+            //开始拼接json字符串
+            //首先得到整体框架对象
+            var frame = $('#skill-row');
+            //遍历其中的skill-p孩子，以class作为筛选条件
+            var skill_p_list = frame.children('.col-lg-6');
+            // alert(skill_p_list.length);
+            var len = skill_p_list.length;
+            json +="\"len\":\""+len+"\"";//拼接skill-p长度数据
+            //接下来就是遍历每一个skill-p
+            var n =0
+            json +=",\"data\":[";
+            for(var i=0;i<len;i++){
+                json +="{";
+                //obj是对象  index是下标
+                //首先获取skill-p的name和description
+                obj = $(skill_p_list[i]);
+                var pname = obj.find('.skill-p-name').val();
+                var pid = obj.find('.skill-p-id').val();
+                var pdescription = obj.find('.skill-p-description').val();
+                //alert(pname+pdescription);
+                var skill_s_list = obj.find('.skill-s');
+                var num = skill_s_list.length;
+                //如果id不是undefined，则表示更新，如果是undefined则是新建的
+                json
+                    +=typeof(pid)=='undefined'?"\"name\":\""+pname+"\",\"description\":\""+pdescription+"\",\"num\":\""+num+"\",\"mark\":\"0\""+",\"son\":[":"\"id\":\""+pid+"\",\"name\":\""+pname+"\",\"description\":\""+pdescription+"\",\"num\":\""+num+"\",\"mark\":\"0\""+",\"son\":[";
+                //下面开始拼接skill-s的name和num，description默认为空
+                for(var j = 0;j<num;j++){
+                    json +="{"
+                    o = $(skill_s_list[j]);
+                    var sname = o.find('.skill-s-name').val();
+                    var sid = o.find('.skill-s-id').val();
+                    var snum = o.find('.skill-s-num').val();
+                    json
+                        +=typeof(sid)=='undefined'?"\"name\":\""+sname+"\",\"num\":\""+snum+"\",\"mark\":\"1\"":"\"id\":\""+sid+"\",\"name\":\""+sname+"\",\"num\":\""+snum+"\",\"mark\":\"1\"";
+                    json +=j!=num-1?"},":"}";
+                }
+                json +="]"
+                json += i!=len-1?"},":"}";
+
+            }
+            json += "]}"
+            //至此拼接完成（长舒一口气，妈呀，数值验证都没做唉，不管了，反正我自己用T T）
+            //alert(json);
+            $.ajax({
+                url:'/skill/saveSkill',
+                type:'post',
+                traditional:true,
+                data:{'jsonData':json},
+                success:function (data) {
+                    if(data=='0'){
+                        alert('保存成功！');
+                    }else if(data=='1'){
+                        alert('保存失败，请稍后重试！');
+                    }else{
+                        alert('出错');
+                    }
+                }
+
+            })
+        }else{
+            alert("提交数据不可为空！")
+        }
+
+    }
+
+</script>
+</body>
+</html>

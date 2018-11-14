@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>head</title>
+    <link type="text/css" rel='stylesheet' th:href="@{/pageResources/css/bootstrap.min.css}">
+    <!-- End Bootstrap css -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link type="text/css" data-themecolor="default" rel='stylesheet'  th:href="@{/pageResources/css/main-default.css}">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="container b-header__box b-relative">
+
+        <div class="b-header-r b-right b-header-r--icon">
+
+            <div class="b-top-nav-show-slide f-top-nav-show-slide b-right j-top-nav-show-slide"><i class="fa fa-align-justify"></i></div>
+            <nav class="b-top-nav f-top-nav b-right j-top-nav">
+                <ul class="b-top-nav__1level_wrap">
+                    <li class="b-top-nav__1level f-top-nav__1level  f-primary-b"
+                        th:classappend="${activeUrl=='home'?'is-active-top-nav__1level':null}"><a
+                            href="/main.html"><i
+                            class="fa fa-home b-menu-1level-ico"></i>主页 <span class="b-ico-dropdown"><i
+                            class="fa fa-arrow-circle-down"></i></span></a>
+
+                    </li>
+
+                    <li class="b-top-nav__1level f-top-nav__1level f-primary-b"
+                        th:classappend="${activeUrl=='note'?'is-active-top-nav__1level':null}">
+                        <a href="#"><i class="fa fa-picture-o b-menu-1level-ico"></i>笔记 <span
+                                class="b-ico-dropdown"><i class="fa fa-arrow-circle-down"></i></span></a>
+
+                    </li>
+                    <li class="b-top-nav__1level f-top-nav__1level f-primary-b"
+                        th:classappend="${activeUrl=='dairy'?'is-active-top-nav__1level':null}">
+                        <a href="#"><i class="fa fa-code b-menu-1level-ico"></i>随笔 <span class="b-ico-dropdown"><i
+                                class="fa fa-arrow-circle-down"></i></span></a>
+
+                    </li>
+                    <li class="b-top-nav__1level f-top-nav__1level f-primary-b b-top-nav-big"
+                        th:classappend="${activeUrl=='photo'?'is-active-top-nav__1level':null}">
+                        <a href="#"><i class="fa fa-cloud-download b-menu-1level-ico"></i>相册<span
+                                class="b-ico-dropdown"><i class="fa fa-arrow-circle-down"></i></span></a>
+
+                    </li>
+
+                    <li class="b-top-nav__1level f-top-nav__1level f-primary-b"
+                        th:classappend="${activeUrl=='other'?'is-active-top-nav__1level':null}">
+                        <a href="#"><i class="fa fa-folder-open b-menu-1level-ico"></i>其他<span
+                                class="b-ico-dropdown"><i class="fa fa-arrow-circle-down"></i></span></a>
+                    </li>
+
+                </ul>
+
+            </nav>
+        </div>
+    </div>
+</header>
+</body>
+<script th:src="@{/pageResources/js/jquery-1.8.2.min.js}"></script>
+<script th:src="@{/pageResources/js/bootstrap.min.js}"></script>
+<script th:src="@{/pageResources/js/cookie.js}"></script>
+<script th:src="@{/pageResources/js/color-themes.js}"></script>
+</html>

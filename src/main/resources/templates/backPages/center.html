@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>center</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet"  th:href="@{/pageResources/assets/vendor/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet"  th:href="@{/pageResources/assets/vendor/linearicons/style.css}">
+    <link rel="stylesheet"  th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet"  th:href="@{/pageResources/assets/css/main.css}">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+    <link rel="apple-touch-icon" sizes="76x76"  th:href="@{/pageResources/assets/img/apple-icon.png}">
+    <link rel="icon" type="image/png" sizes="96x96"  th:href="@{/pageResources/assets/img/favicon.png}">
+</head>
+<body>
+<div id="wrapper">
+    <!-- 顶部 -->
+<div th:replace="commons/leftbar::topBar"></div>
+    <!-- 结束 顶部 -->
+    <!-- 左侧菜单 -->
+
+    <div id="sidebar-nav" class="sidebar" th:replace="commons/leftbar::sideBar(activeUrl='center')">
+        <!--<div class="sidebar-scroll">-->
+            <!--<nav>-->
+                <!--<ul class="nav li-list">-->
+                    <!--<li><a href="/backPages/center.html" class="active"><i class="lnr lnr-home"></i> <span>主页管理</span></a></li>-->
+                    <!--<li><a href="/backPages/skill.html" class=""><i class="lnr lnr-home"></i> <span>技能管理</span></a></li>-->
+                    <!--<li><a href="/backPages/note.html" class=""><i class="lnr lnr-home"></i> <span>笔记管理</span></a></li>-->
+                    <!--<li><a href="/backPages/diary.html" class=""><i class="lnr lnr-home"></i> <span>随笔管理</span></a></li>-->
+                    <!--<li><a href="/backPages/center.html" class=""><i class="lnr lnr-home"></i> <span>图片管理</span></a></li>-->
+                    <!--<li><a href="/backPages/center.html" class=""><i class="lnr lnr-home"></i> <span>日迹管理</span></a></li>-->
+                <!--</ul>-->
+            <!--</nav>-->
+        <!--</div>-->
+    </div>
+    <!-- 结束 左侧菜单 -->
+
+    <div class="main">
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="container-fluid">
+                <h3 class="page-title">myWebsite Center</h3>
+                <!-- 第一个panel -->
+
+                <form method="post" action="" class="form-horizontal">
+                    <div class="panel panel-headline">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人描述</h3>
+                            <p class="panel-subtitle">作为滚动语句，共四条</p>
+                        </div>
+                        <div class="panel-body" id="panel-1">
+                            <div class="col-sm-3">
+                                <input class="hide_id" type="hidden" value="0"/>
+                                <input class="modify_mark" type="hidden" value="0"/>
+                                <input type="text" class="form-control my-title" placeholder="标题" required="required" ><br>
+                                <textarea class="form-control my-content" placeholder="内容" rows="4" required="required"></textarea>
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="hide_id" type="hidden" value="0"/>
+                                <input class="modify_mark" type="hidden" value="0"/>
+                                <input type="text" class="form-control my-title" placeholder="标题" required="required"><br>
+                                <textarea class="form-control my-content" placeholder="内容" rows="4" required="required"></textarea>
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="hide_id" type="hidden" value="0"/>
+                                <input class="modify_mark" type="hidden" value="0"/>
+                                <input type="text" class="form-control my-title" placeholder="标题" required="required"><br>
+                                <textarea class="form-control my-content" placeholder="内容" rows="4" required="required"></textarea>
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="hide_id" type="hidden" value="0"/>
+                                <input class="modify_mark" type="hidden" value="0"/>
+                                <input type="text" class="form-control my-title" placeholder="标题" required="required"><br>
+                                <textarea class="form-control my-content" placeholder="内容" rows="4" required="required"></textarea>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="col-sm-offset-11">
+                                <button type="button" class="btn btn-success" id="panel-1-submit" >提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- 第二个panel -->
+                <div class="panel panel-headline" id = "panel-2">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-headline">
+                                <div class="panel-heading">
+                                    <h3>标题</h3>
+                                    <p>介绍</p>
+                                </div>
+                                <div class="panel-body">
+                                    <input class="hide_id" type="hidden" value="0"/>
+                                    <input class="modify_mark" type="hidden" value="0"/>
+                                    <input type="text" class="form-control my-title" placeholder="标题" required><br>
+                                    <textarea class="form-control my-content" placeholder="内容" rows="4" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel panel-headline">
+                                <div class="panel-heading">
+                                    <h3>标题</h3>
+                                    <p>介绍</p>
+                                </div>
+                                <div class="panel-body">
+                                    <input class="hide_id" type="hidden" value="0"/>
+                                    <input class="modify_mark" type="hidden" value="0"/>
+                                    <input type="text" class="form-control my-title" placeholder="标题" required><br>
+                                    <textarea class="form-control my-content" placeholder="内容" rows="4" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="col-sm-offset-11">
+                            <button type="button" class="btn btn-success" id="panel-2-submit" >提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Javascript -->
+<script th:src="@{/pageResources/assets/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/pageResources/assets/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}"></script>
+<script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
+<!-- 预加载js -->
+<script>
+    $(document).ready(function(){
+        //ajax先拿到后台数据
+        $.ajax({
+            url: "/center/getDescription",
+            dataType:"json",
+            data:{"mark":1},
+            success:function (data) {
+                //获取个人介绍的信息 json解析
+                if(data=="error"){
+                    alert("error!")
+                }else{
+                    $.each(data,function (index,item) {
+                        var objList = $("#panel-1").find(".col-sm-3");
+                        if(objList.length==data.length){
+                            objList[index] = $(objList[index]);
+                            var title = objList[index].find(".my-title");
+                            var id = objList[index].find(".hide_id");
+                            var content = objList[index].find(".my-content");
+                            title.val(item["title"]);
+                            id.val(item["id"]);
+                            content.val(item["content"]);
+                        }else{
+                            alert("返回数据长度与标签个数不一致。")
+                        }
+                    })
+                }
+            },
+            error:function(){
+            }
+        })
+        $.ajax({
+            url: "/center/getDescription",
+            dataType:"json",
+            data:{"mark":2},
+            success:function (data) {
+                //获取个人介绍的信息 json解析
+                if(data=="error"){
+                    alert("error!")
+                }else{
+                    $.each(data,function (index,item) {
+                        var objList = $("#panel-2").find(".col-sm-6");
+                        if(objList.length==data.length){
+                            objList[index] = $(objList[index]);
+                            var title = objList[index].find(".my-title");
+                            var id = objList[index].find(".hide_id");
+                            var content = objList[index].find(".my-content");
+                            title.val(item["title"]);
+                            id.val(item["id"]);
+                            content.val(item["content"]);
+                        }else{
+                            alert("返回数据长度与标签个数不一致。")
+                        }
+                    })
+                }
+            },
+            error:function(){
+            }
+        })
+    });
+
+</script>
+<!-- 动态事件js -->
+<script>
+    /**
+     * panel-1提交
+     */
+    $("#panel-1-submit,#panel-2-submit").on("click",function () {
+        // first choose submit data which val is 1
+
+        var vid = "#"+$(this).attr("id").split("-submit")[0];
+        if(vid.split("-")[1]==""){
+            var mark = 1;
+        }else{
+            var mark = 2;
+        }
+        var objList = $(vid).find(".modify_mark");
+        // alert(objList.length);
+        var idList = [];
+        var titleList = [];
+        var contentList = [];
+        objList.each(function (index,element) {
+            element = $(element);
+            if (element.val()=="1"){
+                // var jsonObj = new JSON();
+                var id = element.siblings('.hide_id').val();
+                var title = element.siblings('.my-title').val();
+                var content = element.siblings('.my-content').val();
+                idList.push(id);
+                titleList.push(title);
+                contentList.push(content);
+            }
+        })
+        $.ajax({
+            url: "/center/saveDescription",
+            type:'get',
+            dataType:"text",
+            traditional:true,
+            data:{"idList":idList,"titleList":titleList,"contentList":contentList,"length":idList.length,"mark":mark},
+            success: function(data){
+                if(data=="success"){
+                    alert("提交成功");
+                }else if(data=="idNotZero"){
+                    alert("idNotZero");
+                }
+            },
+            error:function () {
+                alert("提交失败咯");
+            }
+        });
+    })
+    /**
+     * 文本被修改时触发
+     */
+    $("#panel-1,#panel-2 ").on("change","input,textarea",function () {
+        obj = $(this);
+        obj.siblings('.modify_mark').val(1);
+    })
+
+
+</script>
+</body>
+</html>

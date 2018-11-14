@@ -1,0 +1,83 @@
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapping/*.xml
+
+
+file:
+#  uploadPath: E:\\images\\
+  uploadPath: /www/wwwroot/myblog/images/markImages/
+  accessPath: /upload/markPic/
+
+logging:
+  level:
+    cn:
+      bestrivenlf: debug
+spring:
+#  elasticsearch:
+#    jest:
+#      uris: http://120.78.209.159:9200
+#  data:
+#    elasticsearch:
+#      cluster-name: elasticsearch
+#      cluster-nodes: 120.78.209.159:9300
+
+  mail:
+    username: 214704958@qq.com
+    password: shzhyytuphnbbjea
+    host: smtp.qq.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  rabbitmq:
+    host: 120.78.209.159
+    username: guest
+    password: guest
+  redis:
+    host: 120.78.209.159
+  messages:
+    basename: i18n
+#  resources:
+#    static-locations:
+#      - classpath:static
+#      - classpath:public
+#      - classpath:/META-INF/resources/
+#      - /**
+#      - classpath:/resource
+  thymeleaf:
+    cache: false
+  datasource:
+    username: myWebsite
+    password: 60085040
+    url: jdbc:mysql://120.78.209.159:3306/myWebsite?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
+    #url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&amp;characterEncoding=UTF-8
+    driver-class-name: com.mysql.jdbc.Driver #指定驱动
+    type: com.alibaba.druid.pool.DruidDataSource
+    #   数据源其他配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+
+#    schema:
+#      - classpath:sql/department.sql
+#      - classpath:sql/employee.sql
+
+
+
+

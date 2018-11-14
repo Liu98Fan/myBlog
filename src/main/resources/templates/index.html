@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+<!--[if IE 7 ]>    <html lang="en-gb" class="isie ie7 oldie no-js"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en-gb" class="isie ie8 oldie no-js"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en-gb" class="isie ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en-gb" class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--[if lt IE 9]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <![endif]-->
+    <title>Neu Profile</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lte IE 8]>
+    <script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="/pageResources/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/pageResources/css/isotope.css" media="screen" />
+    <link rel="stylesheet" href="/pageResources/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/pageResources/css/da-slider.css" />
+    <!-- Owl Carousel Assets -->
+    <link href="/pageResources/js/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link rel="stylesheet" href="/pageResources/css/styles.css" />
+    <!-- Font Awesome -->
+    <link href="/pageResources/font/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+<header class="header">
+    <div class="container">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="navbar-header">
+                <button type="button" id="nav-toggle" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="#" class="navbar-brand scroll-top logo"><b>BestRiven Liufan</b></a>
+            </div>
+            <!--/.navbar-header-->
+            <div id="main-nav" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav" id="mainNav">
+                    <li class="active"><a href="#home" class="scroll-link" >主页</a></li>
+                    <li><a href="#aboutUs" class="scroll-link">个人介绍</a></li>
+                    <li><a href="#skills" class="scroll-link">技能加点</a></li>
+                    <li><a href="#experience" class="scroll-link">日迹</a></li>
+                    <li><a href="#portfolio" class="scroll-link">项目</a></li>
+                    <li><a href="#contactUs" class="scroll-link">联系我</a></li>
+                    <li><a href="/backPages/center.html" th:href="@{/center/entrance}"
+                           class="scroll-link">后台
+                    </a></li>
+                </ul>
+            </div>
+            <!--/.navbar-collapse-->
+        </nav>
+        <!--/.navbar-->
+    </div>
+    <!--/.container-->
+</header>
+<!--/.header-->
+<div id="#top"></div>
+<section id="home">
+    <div class="banner-container">
+        <!-- 主页的大图-->
+        <img src="/pageResources/images/banner-bg.jpg" alt="banner" />
+        <div class="container banner-content">
+            <div id="da-slider" class="da-slider">
+                <!--滑动文字-->
+                <div class="da-slide">
+                    <h2>学生</h2>
+                    <p>目前就读于江苏省淮阴工学院</p>
+                    <div class="da-img"></div>
+                </div>
+                <div class="da-slide">
+                    <h2>乐观的程序员</h2>
+                    <p>敢于与bug斗智斗勇，不掉完最后一根头发永不言弃</p>
+                    <div class="da-img"></div>
+                </div>
+                <div class="da-slide">
+                    <h2>慵懒的肥宅</h2>
+                    <p>在变瘦的路上渐行渐远</p>
+                    <div class="da-img"></div>
+                </div>
+                <div class="da-slide">
+                    <h2>高冷的钢铁直男</h2>
+                    <p>没有思路没有思路没有思路</p>
+                    <div class="da-img"></div>
+                </div>
+                <!--  <nav class="da-arrows">
+                        <span class="da-arrows-prev"></span>
+                        <span class="da-arrows-next"></span>
+                    </nav> -->
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="introText">
+    <div class="container">
+        <div class="text-center">
+            <h1>这里是我的个人天地</h1>
+            <p>我也不晓得这里应该写啥，我也不晓得这个网站该如何布局。哦对了，我还忘了ssm怎么写。完了，我是不是要变成智障了。</p>
+        </div>
+    </div>
+
+</section>
+<!-- 个人介绍-->
+<section id="aboutUs" class="secPad">
+    <div class="container">
+        <div class="heading text-center">
+            <!-- Heading -->
+            <h2>我叫刘凡，我是一个程序员，一个低能的程序员</h2>
+            <p>但是，我想要变强</p>
+        </div>
+        <div class="row">
+            <!-- item -->
+            <div class="col-md-4 text-center tileBox">
+                <div class="txtHead"> <i class="fa fa-desktop"></i>
+                    <a href="/note/getNoteList"><h3>笔 <span class="id-color">记</span></h3>
+                    </a>
+                </div>
+                <p th:each="note:${nlist}">
+                    <a
+                            th:href="@{'/note/getNote/'+${note.id}}">[[${#strings.length(note.title)>20?#strings.substring(note.title,0,19)+'...':note.title
+                        }]]</a>&nbsp;&nbsp;&nbsp;&nbsp;[[${#strings.substring(note.date,0,10)}]]
+                </p>
+            </div>
+            <!-- end: -->
+
+            <!-- item -->
+            <div class="col-md-4 text-center tileBox">
+                <div class="txtHead"><i class="fa fa-css3"></i>
+                    <h3>随<span class="id-color">笔</span></h3></div>
+                <p>spring学习    2018-8-29</p>
+                <p>spring学习    2018-8-29</p>
+                <p>spring学习    2018-8-29</p>
+
+            </div>
+            <!-- end: -->
+
+            <!-- item -->
+            <div class="col-md-4 text-center tileBox">
+                <div class="txtHead"><i class="fa fa-lightbulb-o"></i>
+                    <h3>相 <span class="id-color">册</span></h3></div>
+                <p>spring学习    2018-8-29</p>
+                <p>spring学习    2018-8-29</p>
+                <p>spring学习    2018-8-29</p>
+            </div>
+            <!-- end: -->
+        </div>
+    </div>
+</section>
+<!--Quote-->
+<section id="quote" class="bg-parlex">
+    <div class="parlex-back">
+        <div class="container secPad text-center">
+            <h2>最近心情不错，想要吃好吃的</h2><h3>-刘凡</h3>
+        </div>
+        <!--/.container-->
+    </div>
+</section>
+
+<!--Skills-->
+<section id="skills" class="secPad white">
+    <div class="container">
+        <div class="heading text-center">
+            <!-- Heading -->
+            <h2>我的技能</h2>
+            <p>这里应该放啥介绍呢</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" th:each="skillP :${spList}">
+                <h2> <strong>[[${skillP.name}]]</strong></h2>
+                <p class="mrgBtm20">
+                    [[${skillP.description}]]
+                </p>
+                <div class="row" th:each="skillS:${skillP.son}">
+                    <div class="col-md-2 skilltitle">[[${skillS.name}]]</div>
+                    <div class="col-md-8">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" th:aria-valuenow="${skillS.num}" aria-valuemin="0"
+                                 aria-valuemax="100" th:style="'width:'+${skillS.num}+'%'">
+                                <span class="sr-only">[[${skillS.num}]]% Complete</span>[[${skillS.num}]]%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">C++</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">-->
+                                <!--<span class="sr-only">90% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">python</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">-->
+                                <!--<span class="sr-only">80% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">Matlab</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">-->
+                                <!--<span class="sr-only">90% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <!--<div class="col-sm-6">-->
+                <!--<h2>Programing <strong>Skills</strong></h2>-->
+                <!--<p class="mrgBtm20">-->
+                    <!--这里应该放啥介绍呢-->
+
+                <!--</p>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">SSM</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">-->
+                                <!--<span class="sr-only">90% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">SSH</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">-->
+                                <!--<span class="sr-only">80% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">前端</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">-->
+                                <!--<span class="sr-only">75% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="row">-->
+                    <!--<div class="col-md-2 skilltitle">Deep Learning</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="progress">-->
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">-->
+                                <!--<span class="sr-only">75% Complete</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+</section>
+
+<!--Experience-->
+<section id="experience" class="secPad">
+    <div class="container">
+        <div class="heading text-center">
+            <!-- Heading -->
+            <h2>个人日迹</h2>
+            <p>记录了我的点点滴滴，可是有权限的唉</p>
+        </div>
+        <div id="timeline">
+            <div class="row timeline-movement timeline-movement-top">
+            <div class="timeline-badge timeline-future-movement">
+                <a href="#">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+            </div>
+            <div class="timeline-badge timeline-filter-movement">
+                <a href="#">
+                    <span class="glyphicon glyphicon-time"></span>
+                </a>
+            </div>
+
+        </div>
+
+            <div th:each="itemKey:${traceJson.keySet()}" class="row timeline-movement">
+
+                <div class="timeline-badge">
+                    <span class="timeline-balloon-date-day">[[${#strings.substring(itemKey,4,6)}]]</span>
+                    <span class="timeline-balloon-date-month">[[${#strings.substring(itemKey,0,4)}]]</span>
+                </div>
+
+
+                <div th:each="item:${traceJson.get(itemKey)}" class="col-sm-6  timeline-item">
+                    <div class="row">
+                        <div class="col-sm-11">
+                            <div class="timeline-panel credits">
+                                <ul class="timeline-panel-ul">
+                                    <li><span
+                                            class="importo"><a
+                                            th:href="@{/note/getNote/}+${item.jsonInfor.get('id')}">[[${item
+                                        .content}]]</a></span></li>
+                                    <li><span
+                                            class="causale">[[${#strings.substring(item.jsonInfor.get("content"),0,50)
+                                        }]]......</span> </li>
+                                    <li><p><small class="text-muted"> [[${item.newdate}]]</small></p> </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="col-sm-6  timeline-item">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-sm-offset-1 col-sm-11">-->
+                            <!--<div class="timeline-panel debits">-->
+                                <!--<ul class="timeline-panel-ul">-->
+                                    <!--<li><span class="importo">发布一篇笔记</span></li>-->
+                                    <!--<li><span class="causale">笔记的开头笔记的开头笔记的标题？？。。。</span> </li>-->
+                                    <!--<li><p><small class="text-muted"> 2018-8-27</small></p> </li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+
+            <!--due -->
+
+            <!--<div class="row timeline-movement">-->
+
+
+                <!--<div class="timeline-badge">-->
+                    <!--<span class="timeline-balloon-date-day">7月</span>-->
+                    <!--<span class="timeline-balloon-date-month">2018</span>-->
+                <!--</div>-->
+
+                <!--<div class="col-sm-offset-6 col-sm-6  timeline-item">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-sm-offset-1 col-sm-11">-->
+                            <!--<div class="timeline-panel debits">-->
+                                <!--<ul class="timeline-panel-ul">-->
+                                    <!--<li><span class="importo">七月的天真热</span></li>-->
+                                    <!--<li><span class="causale">热的我想吃一个大西瓜</span> </li>-->
+                                    <!--<li><p><small class="text-muted"> 2018-7-15</small></p> </li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="col-sm-6  timeline-item">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-sm-11">-->
+                            <!--<div class="timeline-panel credits">-->
+                                <!--<ul class="timeline-panel-ul">-->
+                                    <!--<li><span class="importo">七月的雨真大</span></li>-->
+                                    <!--<li><span class="causale">啊啊啊啊啊啊啊哇啊啊啊啊啊啊啊啊啊啊啊下雨啦</span> </li>-->
+                                    <!--<li><p><small class="text-muted"> 2018-7-10</small></p> </li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+            <!--</div>-->
+            <!--<div class="row timeline-movement">-->
+
+
+                <!--<div class="timeline-badge">-->
+                    <!--<span class="timeline-balloon-date-day">6月</span>-->
+                    <!--<span class="timeline-balloon-date-month">2018</span>-->
+                <!--</div>-->
+
+                <!--<div class="col-sm-offset-6 col-sm-6  timeline-item">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-sm-offset-1 col-sm-11">-->
+                            <!--<div class="timeline-panel debits">-->
+                                <!--<ul class="timeline-panel-ul">-->
+                                    <!--<li><span class="importo">大二结束咯</span></li>-->
+                                    <!--<li><span class="causale">结束拉萨结束啦结束啦 </span> </li>-->
+                                    <!--<li><p><small class="text-muted"> 2018-6-30</small></p> </li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="col-sm-6  timeline-item">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-sm-11">-->
+                            <!--<div class="timeline-panel credits">-->
+                                <!--<ul class="timeline-panel-ul">-->
+                                    <!--<li><span class="importo">期末周到了</span></li>-->
+                                    <!--<li><span class="causale">爱i爱爱爱爱爱爱爱爱爱爱爱爱 </span> </li>-->
+                                    <!--<li><p><small class="text-muted"> 2018-6-15</small></p> </li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+            <!--</div>-->
+        </div>
+    </div>
+
+</section>
+
+
+<!--Portfolio-->
+<section id="portfolio" class="page-section section appear clearfix secPad">
+    <div class="container">
+
+        <div class="heading text-center">
+            <!-- Heading -->
+            <h2>项目经历</h2>
+            <p>学习计算机以来的所有成功与失败，汗水和泪水都在这里了。</p>
+        </div>
+
+        <div class="row">
+            <nav id="filter" class="col-md-12 text-center">
+                <ul>
+                    <li><a href="#" class="current btn-theme btn-small" data-filter="*">所有</a></li>
+                    <li><a href="#" class="btn-theme btn-small" data-filter=".webdesign">网站</a></li>
+                    <li><a href="#" class="btn-theme btn-small" data-filter=".photography">公众号</a></li>
+                    <li><a href="#" class="btn-theme btn-small" data-filter=".print">软件</a></li>
+                </ul>
+            </nav>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="portfolio-items isotopeWrapper clearfix" id="3">
+
+                        <article class="col-sm-4 isotopeItem webdesign">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img1.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img1.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem photography">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img2.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img2.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+
+                        <article class="col-sm-4 isotopeItem photography">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img3.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img3.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem print">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img4.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img4.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem photography">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img5.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img5.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem webdesign">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img6.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img6.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem print">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img7.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img7.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem photography">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img8.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img8.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="col-sm-4 isotopeItem print">
+                            <div class="portfolio-item">
+                                <img src="/pageResources/images/portfolio/img9.jpg" alt="" />
+                                <div class="portfolio-desc align-center">
+                                    <div class="folio-info">
+                                        <a href="/pageResources/images/portfolio/img9.jpg" class="fancybox">
+                                            <h5>Project Name</h5>
+                                            <i class="fa fa-arrows-alt fa-2x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!--Contact -->
+<section id="contactUs" class="page-section secPad">
+    <div class="container">
+
+        <div class="row">
+            <div class="heading text-center">
+                <!-- Heading -->
+                <h2>我的联系方式</h2>
+                <p>如果你对我感兴趣，可以通过下面的方式联系我</p>
+            </div>
+        </div>
+
+        <div class="row mrgn30">
+            <div class="col-sm-12 col-md-8">
+                <!--NOTE: Update your email Id in "contact_me.php" file in order to receive emails from your contact form-->
+                <form name="sentMessage" id="contactForm"  novalidate th:action="@{/tools/sendMail}" th:method="post">
+                    <h3>Contact Form</h3>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="text" class="form-control"
+                                   placeholder="Full Name" id="name" required name="请输入您的名字"
+                                   data-validation-required-message="Please enter your name" />
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="email" class="form-control" placeholder="请留下你的邮箱以便给您回复" name="email"
+                                   id="email" required
+                                   data-validation-required-message="Please enter your email" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+		<textarea rows="10" cols="100" class="form-control"
+                  placeholder="请输入您要发的信息" id="message" required
+                  data-validation-required-message="Please enter your message" minlength="5"
+                  data-validation-minlength-message="Min 5 characters"
+                  maxlength="999" name="message"style="resize:none"></textarea>
+                        </div>
+                    </div>
+                    <div id="success"> </div> <!-- For success/fail messages -->
+                    <button type="button" onclick="sendMail()" class="btn btn-primary pull-right">Send</button><br />
+                </form>
+            </div>
+            <div class="col-sm-12 col-md-2">
+                <h4>个人信息:</h4>
+                <address>
+                    刘凡<br>
+                    90后<br>
+                    乐观开朗积极向上<br>
+                </address>
+                <h4>QQ:</h4>
+                <address>
+                    214704958<br>
+                </address>
+            </div>
+        </div>
+    </div>
+    <!--/.container-->
+</section>
+<footer>
+    <div class="container">
+        <div class="social text-center">
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-dribbble"></i></a>
+            <a href="#"><i class="fa fa-flickr"></i></a>
+            <a href="#"><i class="fa fa-github"></i></a>
+        </div>
+
+        <div class="clear"></div>
+        <!--CLEAR FLOATS-->
+    </div>
+</footer>
+<!--/.page-section-->
+<section class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                Copyright &copy; 2016.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+            </div>
+        </div>
+        <!-- / .row -->
+    </div>
+</section>
+<a href="#top" class="topHome"><i class="fa fa-chevron-up fa-2x"></i></a>
+
+<!--[if lte IE 8]><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script><![endif]-->
+<script src="/pageResources/js/modernizr-latest.js"></script>
+<script src="/pageResources/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script src="/pageResources/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/pageResources/js/jquery.isotope.min.js" type="text/javascript"></script>
+<script src="/pageResources/js/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="/pageResources/js/jquery.nav.js" type="text/javascript"></script>
+<script src="/pageResources/js/jquery.cslider.js" type="text/javascript"></script>
+<script src="contact/jqBootstrapValidation.js"></script>
+<script src="contact/contact_me.js"></script>
+<script src="/pageResources/js/custom.js" type="text/javascript"></script>
+<script src="/pageResources/js/owl-carousel/owl.carousel.js"></script>
+<script>
+    $(document).ready(function(){
+        //ajax获取个人介绍数据
+        $.ajax({
+            url: "/center/getDescription",
+            dataType:"json",
+            data:{"mark":1},
+            success:function (data) {
+                //获取个人介绍的信息 json解析
+                if(data=="error"){
+                    alert("error!")
+                }else{
+                    $.each(data,function (index,item) {
+                        var objList = $("#da-slider").find(".da-slide");
+                        if(objList.length==data.length){
+                            objList[index] = $(objList[index]);
+                            var title = objList[index].children("h2");
+                            var content = objList[index].find("p");
+                            title.html(item["title"]);
+                            content.html(item["content"]);
+                        }else{
+                            alert("返回数据长度与标签个数不一致。"+objList.length);
+                        }
+                    })
+                }
+            },
+            error:function(){
+            }
+        })
+
+        $.ajax({
+            url: "/center/getDescription",
+            dataType:"json",
+            data:{"mark":2},
+            success:function (data) {
+                //获取个人介绍的信息 json解析
+                if(data=="error"){
+                    alert("error!")
+                }else{
+                    $("#introText").find("h1").html(data[0]["title"]);
+                    $("#introText").find("p").html(data[0]["content"]);
+                    $("#aboutUs").find(".heading h2").html(data[1]["title"]);
+                    $("#aboutUs").find(".heading p").html(data[1]["content"]);
+                }
+            },
+            error:function(){
+            }
+        })
+    });
+
+    function sendMail() {
+        var name = $("#name").val();
+        var mail = $("#email").val();
+        var message = $("#message").val();
+        var mark = 0;
+        $("#contactForm").find(" input").each(function (index,item) {
+            if($(item).val()==''||typeof ($(item).val())=='undefined'){
+                mark=1;
+            }
+        })
+        if(mark==0){
+            $.ajax({
+                url: "/tools/sendMail",
+                dataType:"text",
+                data:{"name":name,"email":mail,"message":message},
+                success:function (data) {
+                    //获取个人介绍的信息 json解析
+                    if(data=="fail"){
+                        alert("发送失败，请稍后重试!")
+                    }else{
+                        alert("发送成功！")
+                    }
+                },
+                error:function(){
+                    alert("服务器繁忙，请稍后重试！");
+                }
+            })
+        }else{
+            alert("不可以提交空信息哦~");
+        }
+    }
+
+</script>
+</body>
+</html>

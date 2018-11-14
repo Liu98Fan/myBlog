@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bestrivenlf.myWeb.interfaceDao.SkillDao">
+    <select id="saveSkill" parameterType="java.util.List">
+        <foreach item="item" index="index" collection="list">
+
+            <!--开始存skillp-->
+            call saveSkillP(#{item.id},#{item.name},#{item.description},#{item.mark},#{item.date},#{item.newdate},#{item.del_flag})
+            <foreach collection="item.son" item="sonitem" index="sonindex">
+                <!--这里存一个skillson然后存对应关系-->
+                call saveSkillSon(#{sonitem.id},#{sonitem.name},#{sonitem.description},#{sonitem.mark},#{sonitem.num},#{sonitem.date},#{sonitem.newdate},#{sonitem.del_flag},#{item.id})
+            </foreach>
+        </foreach>
+    </select>
+    <select id="saveSkillP" parameterType="cn.bestrivenlf.myWeb.entity.SkillParent" resultType="Integer">
+        call saveSkillP(#{id},#{name},#{description},#{mark},#{date},#{newdate},#{del_flag})
+    </select>
+    <select id="saveSkillS"  resultType="Integer">
+        call
+        saveSkillSon(#{id},#{name},#{description},#{mark},#{num},#{date},#{newdate},#{del_flag},#{pid})
+    </select>
+    <select id="getSkillSonByPId" parameterType="String" resultType="cn.bestrivenlf.myWeb.entity.SkillSon">
+        SELECT
+	A.id 'id',
+	A. NAME 'name',
+	A.description 'description',
+	A.mark 'mark',
+	A.num 'num',
+	A.date 'date',
+	A.newdate 'newdate',
+	A.del_flag 'del_flag',
+	B.pid 'pid'
+FROM
+	skill_s_tb A
+LEFT JOIN skill_relation_tb B ON A.id = B.sid
+WHERE
+	A.del_flag = 0
+AND B.del_flag = 0 and B.pid = #{pid}
+    </select>
+    <select id="getSkillP" resultType="cn.bestrivenlf.myWeb.entity.SkillParent">
+        select * from skill_p_tb where del_flag = 0;
+    </select>
+</mapper>
