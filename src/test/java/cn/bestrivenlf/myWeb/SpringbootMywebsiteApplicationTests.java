@@ -65,8 +65,8 @@ public class SpringbootMywebsiteApplicationTests {
     @Test
     public void sendMail(){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("Test");
-        message.setText("Test");
+        message.setSubject("message from god！");
+        message.setText("shagou,我又测试了唉~~~~~~~~~");
         message.setTo("88665291@qq.com");
         message.setFrom("214704958@qq.com");
         mailSender.send(message);

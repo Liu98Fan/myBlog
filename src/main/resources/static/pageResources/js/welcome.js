@@ -142,10 +142,12 @@
 		audio = {
 			sounds : {},
 			sources : [{
-				lake : 'sounds/Whales Spouting Out Water-SoundBible.com-966355632.mp3',
-				splash : 'sounds/Depth Charge 2-SoundBible.com-338644910.mp3',
-				splash2 : 'sounds/Water Splash-SoundBible.com-800223477.mp3',
-				underwater : 'sounds/156011__hdvideoguy__scubadiving-01.mp3'
+				// lake : '/pageResources/sounds/Whales Spouting Out Water-SoundBible.com-966355632.mp3',
+				// splash : '/pageResources/sounds/Depth Charge 2-SoundBible.com-338644910.mp3',
+				// splash2 : '/pageResources/sounds/Water Splash-SoundBible.com-800223477.mp3',
+				// underwater : '/pageResources/sounds/156011__hdvideoguy__scubadiving-01.mp3'
+				pop : '/media/music/POPSTARS.mp3'
+                //pop : '/pageResources/sounds/POPSTARS.mp3'
 			}],
 			load : function(callback) {
 				this.totalFiles = Object.size(this.sources[0]);
@@ -205,20 +207,30 @@
 				++loadedMediaItems;
 				if(loadedMediaItems === 2) {
 					mainContainer.classList.add('landing-layout--loaded');
-					// Play lake sound.
-					audio.loop('lake');
-					audio.play('lake');
-					// Init the bubbles canvas animation.
-					bubbles.init();
-					// Init/Bind Events
-					initEvents();
+					try{
+                        // Play lake sound.
+                        audio.loop('pop');
+                        audio.play('pop');
+                        // Init the bubbles canvas animation.
+                        bubbles.init();
+                        // Init/Bind Events
+                        initEvents();
+					}catch (e) {
+                        // Init the bubbles canvas animation.
+                        bubbles.init();
+                        // Init/Bind Events
+                        initEvents();
+                    }
 				}
 			};
 
 		// Preload images..
 		imagesLoaded(landingWrapper, { background: true }, checkloaded);
 		// Preload sounds..
-		audio.load(checkloaded);
+		try{audio.load(checkloaded);}catch (e) {
+
+        }
+		
 	}
 
 	function initEvents() {
@@ -245,25 +257,25 @@
 		// Toggle class on the main container.
 		mainContainer.classList.toggle('landing-layout--open');
 
-		if( isOpen ) { // close it.
-			// Stop the bubbles canvas animation.
-			bubbles.stop();
-			// Sounds..
-			audio.fadeOut('underwater');
-			audio.play('splash2', 700);
-			audio.loop('lake');
-			audio.fadeIn('lake', 700);
-		}
-		else {	// open it.
-			// Start the bubbles canvas animation.
-			bubbles.start();
-			// Sounds..
-			audio.fadeOut('lake');
-			audio.play('splash', 700);
-			audio.loop('underwater');
-			audio.play('underwater', 700);
-			audio.fadeIn('underwater');
-		}
+		// if( isOpen ) { // close it.
+		// 	// Stop the bubbles canvas animation.
+		// 	bubbles.stop();
+		// 	// Sounds..
+		// 	audio.fadeOut('underwater');
+		// 	audio.play('splash2', 700);
+		// 	audio.loop('lake');
+		// 	audio.fadeIn('lake', 700);
+		// }
+		// else {	// open it.
+		// 	// Start the bubbles canvas animation.
+		// 	bubbles.start();
+		// 	// Sounds..
+		// 	audio.fadeOut('lake');
+		// 	audio.play('splash', 700);
+		// 	audio.loop('underwater');
+		// 	audio.play('underwater', 700);
+		// 	audio.fadeIn('underwater');
+		// }
 	}
 
 	init();

@@ -8,6 +8,8 @@ file:
 #  uploadPath: E:\\images\\
   uploadPath: /www/wwwroot/myblog/images/markImages/
   accessPath: /upload/markPic/
+  musicPath: /www/wwwroot/myblog/media/music/
+  musicAccessPath: /media/music/
 
 logging:
   level:

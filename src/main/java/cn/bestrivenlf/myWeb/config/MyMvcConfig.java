@@ -24,6 +24,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
     String accessPath;
     @Value("${file.uploadPath}")
     String uploadPath;
+    @Value("${file.musicPath}")
+    String musicPath;
+    @Value("${file.musicAccessPath}")
+    String musicAcessPath;
     /**
      * 首页显示
      * @return
@@ -34,7 +38,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
                 registry.addViewController("/main.html").setViewName("redirect:/main/entrance");
-                registry.addViewController("/").setViewName("redirect:/main/entrance");
+                registry.addViewController("/").setViewName("welcome.html");
 //                registry.addViewController("index").setViewName("redirect:/center/entrance");
             }
             //注册拦截器
@@ -51,6 +55,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(accessPath+"**").addResourceLocations("file:"+uploadPath);
+        registry.addResourceHandler(musicAcessPath+"**").addResourceLocations("file:"+musicPath);
     }
 
     /**
