@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>center</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/bootstrap/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/font-awesome/css/font-awesome.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/linearicons/style.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/main.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/layui/css/layui.css}"  media="all">
+    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/demo.css}">
+
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+    <link rel="apple-touch-icon" sizes="76x76"th:href="@{/pageResources/assets/img/apple-icon.png}" >
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/pageResources/assets/img/favicon.png}" >
+    <style>
+        #xianshi button{
+            margin-right:10px !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <!-- 顶部 -->
+    <div th:replace="commons/leftbar::topBar"></div>
+    <!-- 结束 顶部 -->
+    <!-- 左侧菜单 -->
+    <div id="sidebar-nav" class="sidebar" th:replace="commons/leftbar::sideBar(activeUrl='authorityManager')">
+    </div>
+    <!-- 结束 左侧菜单 -->
+
+    <div class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+
+                <div class="row" id="xianshi">
+
+                </div>
+                <div class="text-center" id="changePage"></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">角色信息查询</h4>
+                </div>
+                <div class="modal-body" id="roleDisplay">
+                    <!--<table class="table table-hover table-striped">-->
+                        <!--<thead>-->
+                        <!--<th>序号</th>-->
+                        <!--<th>角色</th>-->
+                        <!--<th>描述</th>-->
+                        <!--<th>操作</th>-->
+                        <!--</thead>-->
+                        <!--<tr>-->
+                            <!--<td>0</td>-->
+                            <!--<td>user</td>-->
+                            <!--<td>普通用户</td>-->
+                            <!--<td><button class="btn btn-danger">删除</button></td>-->
+                        <!--</tr>-->
+
+                    <!--</table>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Javascript -->
+<script th:src="@{/pageResources/assets/vendor/jquery/jquery.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/bootstrap/js/bootstrap.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}" ></script>
+<script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
+<script th:src="@{/pageResources/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/pageResources/toastr/toastr.js}"></script>
+<script th:src="@{/pageResources/js/userManagerSplitPage.js}"></script>
+<script th:src="@{/pageResources/js/confirmBox.js}"></script>
+<script>
+    toastr.options.positionClass = 'toast-bottom-center';
+    $("#xianshi").on("click","#modifyPassword",function () {
+        // alert("还没写呢，快催催我！");
+        toastr.warning('还没写呢，快催催我！');
+    })
+    $("#xianshi").on("click","#deleteButton",function () {
+        // alert("还没写呢，快催催我！");
+        var id=$(this).siblings(" input").val();
+        //toastr.success('id='+id);
+        Ewin.confirm({ message: "确认要删除选择的用户吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/manager/deleteUser",
+                data: { "id": id},
+                success: function (data, status) {
+
+                    if (data["code"] == 200) {
+                        toastr.success('删除成功！');
+                        // $("#tb_departments").bootstrapTable('refresh');
+                        getInformation()
+                    }else{
+                        toastr.error(data["message"]);
+                    }
+                },
+                error: function () {
+                    toastr.error('删除失败，请稍后重试');
+                },
+            });
+        });
+    })
+
+    $("#xianshi").on("click","#displayRoleButton",function () {
+        var id=$(this).siblings(" input").val();
+        //toastr.success('id='+id);
+
+        $.ajax({
+            type: "post",
+            url: "/manager/listRoleById",
+            data: { "id": id},
+            success: function (data, status) {
+                $("#roleDisplay").html("")
+                var s = "<table class=\"table table-hover table-striped\">\n" +
+                    "                        <thead>\n" +
+                    "                            <th>序号</th>\n" +
+                    "                            <th>角色</th>\n" +
+                    "                            <th>描述</th>\n" +
+                    "                            <th>操作</th>\n" +
+                    "                        </thead>\n" +
+                    "                        ";
+                if (data["code"] == 200) {
+                    //追加信息
+                    $(data["object"]).each(function (index,item) {
+
+                        s +="<tr><input type='hidden' value='"+item.id+"'\>\n" +
+                            "                            <td>"+index+"</td>\n" +
+                            "                            <td>"+item.role+"</td>\n" +
+                            "                            <td>"+item.describe+"</td>\n" +
+                            "                            <td><button class=\"btn btn-danger\">删除</button></td>\n" +
+                            "                        </tr>"
+
+                    });
+                    s +="</table>";
+                    $("#roleDisplay").append(s);
+                }else{
+                    toastr.error(data["message"]);
+                }
+            },
+            error: function () {
+                toastr.error('网络异常，请稍后重试');
+            },
+        });
+
+    })
+
+</script>
+
+</body>
+</html>

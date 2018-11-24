@@ -7,7 +7,8 @@ file:
   #  uploadPath: E:\\images\\
   uploadPath: /www/wwwroot/myblog/images/markImages/
   accessPath: /upload/markPic/
-  musicPath: /www/wwwroot/myblog/media/music/
+  #musicPath: /www/wwwroot/myblog/media/music/
+  musicPath: C:/Users/LIUFAN/Desktop/
   musicAccessPath: /media/music/
 
 logging:

@@ -10,7 +10,7 @@
 
         <link th:href="@{/pageResources/css/login-register.css}" rel="stylesheet" />
         <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-
+        <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
 
 		<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" th:href="@{/pageResources/css/normalize.css}" />
@@ -151,9 +151,9 @@
 						</a>
 					</li>
 					<li class="featured-list__item">
-						<a href="#" class="featured-list__link">
+						<a href="/tools/leaveMessage" class="featured-list__link">
 							<img class="featured-list__img" th:src="@{/pageResources/images/icons/d3.svg}" alt="Diving 3">
-							<h3 class="featured-list__title">我的相册</h3>
+							<h3 class="featured-list__title">留言娱乐</h3>
 						</a>
 					</li>
 					<li class="featured-list__item">
@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="error"></div>
                                 <div class="form loginBox">
-                                    <form method="post" action="#" accept-charset="UTF-8"
+                                    <form method="post" action="/user/login" accept-charset="UTF-8"
                                           onsubmit="return verifyForm(this)">
                                         <div class="form-group">
                                             <label class="sr-only" >Username</label>
@@ -256,17 +256,18 @@
                         <div class="box">
                             <div class="content registerBox" style="display:none;">
                                 <div class="form">
-                                    <form method="post" html="{:multipart=>true}" data-remote="true" action="#"
+                                    <form method="post" html="{:multipart=>true}" data-remote="true" action="/user/register"
                                           accept-charset="UTF-8" onsubmit="return verifyForm()">
-                                        <input id="username" class="form-control" type="text" placeholder="Username"
+                                        <input id="username" class="form-control username" type="text" placeholder="Username"
                                                name="username" required>
+										<span id="usernameSpan"style="color:red;display: none">用户名已存在！</span>
                                         <input id="password" class="form-control" type="password"
                                                placeholder="Password" name="password" required>
                                         <input id="password_confirmation" class="form-control" type="password"
                                                placeholder="Repeat Password" name="password_confirmation" required>
                                         <input id="email" class="form-control" type="email" placeholder="Email"
-                                               name="email" required>s
-                                        <input id ="submit"class="btn btn-default btn-register" type="submit"
+                                               name="email" required>
+                                        <input id ="submitRegister"class="btn btn-default btn-register" type="submit"
                                                value="Create account" name="commit">
                                     </form>
                                 </div>
@@ -296,10 +297,13 @@
 		<script th:src="@{/pageResources/js/imagesloaded.pkgd.min.js}"></script>
 		<script th:src="@{/pageResources/js/welcome.js}"></script>
         <script th:src="@{/pageResources/js/gt.js}"></script>
+		<script th:src="@{/pageResources/js/userFunction.js}"></script>
+        <script th:src="@{/pageResources/toastr/toastr.js}"></script>
 
 
 
         <script>
+            toastr.options.positionClass = 'toast-top-center';
 
         function verifyForm(obj){
             var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
@@ -329,6 +333,7 @@
             });
             // 将验证码加到id为captcha的元素里，同时会有三个input的值用于表单提交
             captchaObj.appendTo("#captcha");
+            //captchaObj.appendTo("#captcha1");
             captchaObj.onReady(function () {
                 $("#wait").hide();
             });

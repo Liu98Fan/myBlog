@@ -146,8 +146,8 @@
 				// splash : '/pageResources/sounds/Depth Charge 2-SoundBible.com-338644910.mp3',
 				// splash2 : '/pageResources/sounds/Water Splash-SoundBible.com-800223477.mp3',
 				// underwater : '/pageResources/sounds/156011__hdvideoguy__scubadiving-01.mp3'
-				pop : '/media/music/POPSTARS.mp3'
-                //pop : '/pageResources/sounds/POPSTARS.mp3'
+				//pop : 'https://music.163.com/song?id=1321382214&userid=354415381'
+                pop : '/pageResources/sounds/POPSTARS.mp3'
 			}],
 			load : function(callback) {
 				this.totalFiles = Object.size(this.sources[0]);
@@ -206,21 +206,23 @@
 			checkloaded = function() {
 				++loadedMediaItems;
 				if(loadedMediaItems === 2) {
-					mainContainer.classList.add('landing-layout--loaded');
+
 					try{
                         // Play lake sound.
                         audio.loop('pop');
                         audio.play('pop');
-                        // Init the bubbles canvas animation.
-                        bubbles.init();
-                        // Init/Bind Events
-                        initEvents();
 					}catch (e) {
                         // Init the bubbles canvas animation.
                         bubbles.init();
                         // Init/Bind Events
                         initEvents();
                     }
+				}else if(loadedMediaItems==1){
+                    mainContainer.classList.add('landing-layout--loaded');
+                    // Init the bubbles canvas animation.
+                    bubbles.init();
+                    // Init/Bind Events
+                    initEvents();
 				}
 			};
 

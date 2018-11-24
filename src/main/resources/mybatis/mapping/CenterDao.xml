@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.bestrivenlf.myWeb.interfaceDao.CenterDao">
+<mapper namespace="cn.bestrivenlf.myweb.interfaceDao.CenterDao">
 
-    <!--<select id="saveTacModel" parameterType="cn.bestrivenlf.myWeb.entity.TacModel" >-->
+    <!--<select id="saveTacModel" parameterType="cn.bestrivenlf.myweb.entity.TacModel" >-->
         <!--CALL saveTacModel(#{id},#{mark},#{title},#{content},#{date},#{del_flag});-->
     <!--</select>-->
 
-    <!--<select id="getDescription" parameterType="Integer" resultType="cn.bestrivenlf.myWeb.entity.TacModel">-->
+    <!--<select id="getDescription" parameterType="Integer" resultType="cn.bestrivenlf.myweb.entity.TacModel">-->
         <!--select * from center_tb where mark = #{mark} and del_flag = 0;-->
     <!--</select>-->
 </mapper>
