@@ -18,27 +18,27 @@ logging:
 spring:
 #  elasticsearch:
 #    jest:
-#      uris:xxx
+#      uris: http://120.78.209.159:9200
 #  data:
 #    elasticsearch:
 #      cluster-name: elasticsearch
-#      cluster-nodes: xxxx
+#      cluster-nodes: 120.78.209.159:9300
 
   mail:
-    username: xxxx
-    password: xxxx
-    host: xxxx
+    username: 214704958@qq.com
+    password: shzhyytuphnbbjea
+    host: smtp.qq.com
     properties:
       mail:
         smtp:
           ssl:
             enable: true
   rabbitmq:
-    host: xxxx
+    host: 120.78.209.159
     username: guest
     password: guest
   redis:
-    host: xxxx
+    host: 120.78.209.159
   messages:
     basename: i18n
 #  resources:
@@ -51,9 +51,9 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-    username: xxxx
-    password: xxxx
-    url: jdbc:mysql://xxxxx:3306/myWebsite?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
+    username: myWebsite
+    password: 60085040
+    url: jdbc:mysql://120.78.209.159:3306/myWebsite?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     #url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&amp;characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver #指定驱动
     type: com.alibaba.druid.pool.DruidDataSource
