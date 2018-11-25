@@ -26,8 +26,7 @@
         <nav>
             <ul class="nav li-list">
                 <li><a th:href="@{/center/entrance}" th:class="${activeUrl=='center'?'active':''}" class="active"><i
-                        class="lnr lnr-home"></i> <span>主页管理
-                </span></a></li>
+                        class="lnr lnr-home"></i> <span>主页管理</span></a></li>
                 <li><a th:href="@{/skill/entrance}" th:class="${activeUrl=='skill'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>技能管理</span></a></li>
                 <li><a th:href="@{/note/entrance}" th:class="${activeUrl=='note'?'active':''}"><i
@@ -38,6 +37,18 @@
                         class="lnr lnr-home"></i> <span>图片管理</span></a></li>
                 <li><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='action'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>日迹管理</span></a></li>
+                <li>
+                    <a href="#permissionPages" data-toggle="collapse"th:classappend="${activeUrl=='userManager'?'active':''}" class="collapsed" aria-expanded="false"><i class="lnr lnr-cog"></i> <span>权限管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                    <div id="permissionPages" class="collapse">
+                        <ul class="nav li-list">
+                            <li><a href="/manager/userManager" th:class="${activeUrl=='userManager'?'active':''}">用户管理</a></li>
+                            <li><a href="/manager/roleManager" th:class="${activeUrl=='roleManager'?'active':''}">角色管理</a></li>
+                            <li><a href="/manager/authorityManager" th:class="${activeUrl=='authorityManager'?'active':''}">权限管理</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a th:href="@{/main/entrance}" th:class="${activeUrl=='action'?'active':''}"><i
+                        class="lnr lnr-home"></i> <span>返回主页</span></a></li>
             </ul>
         </nav>
     </div>
@@ -66,6 +77,15 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                         <i class="lnr lnr-alarm"></i>
+                        <span class="badge bg-danger">授权信息</span>
+                    </a>
+                    <ul class="dropdown-menu notifications" th:each="item:${session.currentUser.roles}">
+                        <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>[[${item.role}]]</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                        <i class="lnr lnr-alarm"></i>
                         <span class="badge bg-danger">5</span>
                     </a>
                     <ul class="dropdown-menu notifications">
@@ -87,13 +107,14 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img th:src="@{/pageResources/assets/img/user.png}"
-                                                                                    class="img-circle" alt="Avatar"> <span>Samuel</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                                                                                    class="img-circle" alt="Avatar"> <span>[[${session.currentUser.username}]]</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
                         <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
                         <li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
-                        <li><a href="#"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+                        <li><a href="/user/logout"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
                     </ul>
                 </li>
                 <!-- <li>

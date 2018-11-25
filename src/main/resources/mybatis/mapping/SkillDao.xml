@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.bestrivenlf.myWeb.interfaceDao.SkillDao">
+<mapper namespace="cn.bestrivenlf.myweb.interfaceDao.SkillDao">
     <select id="saveSkill" parameterType="java.util.List">
         <foreach item="item" index="index" collection="list">
 
@@ -12,14 +12,14 @@
             </foreach>
         </foreach>
     </select>
-    <select id="saveSkillP" parameterType="cn.bestrivenlf.myWeb.entity.SkillParent" resultType="Integer">
+    <select id="saveSkillP" parameterType="cn.bestrivenlf.myweb.entity.SkillParent" resultType="Integer">
         call saveSkillP(#{id},#{name},#{description},#{mark},#{date},#{newdate},#{del_flag})
     </select>
     <select id="saveSkillS"  resultType="Integer">
         call
         saveSkillSon(#{id},#{name},#{description},#{mark},#{num},#{date},#{newdate},#{del_flag},#{pid})
     </select>
-    <select id="getSkillSonByPId" parameterType="String" resultType="cn.bestrivenlf.myWeb.entity.SkillSon">
+    <select id="getSkillSonByPId" parameterType="String" resultType="cn.bestrivenlf.myweb.entity.SkillSon">
         SELECT
 	A.id 'id',
 	A. NAME 'name',
@@ -37,7 +37,7 @@ WHERE
 	A.del_flag = 0
 AND B.del_flag = 0 and B.pid = #{pid}
     </select>
-    <select id="getSkillP" resultType="cn.bestrivenlf.myWeb.entity.SkillParent">
+    <select id="getSkillP" resultType="cn.bestrivenlf.myweb.entity.SkillParent">
         select * from skill_p_tb where del_flag = 0;
     </select>
 </mapper>

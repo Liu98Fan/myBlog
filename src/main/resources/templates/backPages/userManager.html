@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>center</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/bootstrap/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/font-awesome/css/font-awesome.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/linearicons/style.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/css/bootstrap-table.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/main.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/layui/css/layui.css}"  media="all">
+    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/demo.css}">
+
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+    <link rel="apple-touch-icon" sizes="76x76"th:href="@{/pageResources/assets/img/apple-icon.png}" >
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/pageResources/assets/img/favicon.png}" >
+    <style>
+        #xianshi button{
+            margin-right:10px !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <!-- 顶部 -->
+    <div th:replace="commons/leftbar::topBar"></div>
+    <!-- 结束 顶部 -->
+    <!-- 左侧菜单 -->
+    <div id="sidebar-nav" class="sidebar" th:replace="commons/leftbar::sideBar(activeUrl='userManager')">
+    </div>
+    <!-- 结束 左侧菜单 -->
+
+    <div class="main">
+        <div class="main-content">
+            <div class="container-fluid">
+                <table id="tb_users"></table>
+                <!--<div class="row" id="xianshi">-->
+
+                <!--</div>-->
+                <!--<div class="text-center" id="changePage"></div>-->
+            </div>
+        </div>
+
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">角色信息查询</h4>
+                </div>
+                <div class="modal-body" id="roleDisplay">
+                    <!--<table class="table table-hover table-striped">-->
+                        <!--<thead>-->
+                        <!--<th>序号</th>-->
+                        <!--<th>角色</th>-->
+                        <!--<th>描述</th>-->
+                        <!--<th>操作</th>-->
+                        <!--</thead>-->
+                        <!--<tr>-->
+                            <!--<td>0</td>-->
+                            <!--<td>user</td>-->
+                            <!--<td>普通用户</td>-->
+                            <!--<td><button class="btn btn-danger">删除</button></td>-->
+                        <!--</tr>-->
+
+                    <!--</table>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Javascript -->
+<script th:src="@{/pageResources/assets/vendor/jquery/jquery.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/bootstrap/js/bootstrap.min.js}" ></script>
+<script th:src="@{/pageResources/js/bootstrap-table.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}" ></script>
+<script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}" ></script>
+<script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
+<script th:src="@{/pageResources/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/pageResources/toastr/toastr.js}"></script>
+<!--<script th:src="@{/pageResources/js/userManagerSplitPage.js}"></script>-->
+<script th:src="@{/pageResources/js/confirmBox.js}"></script>
+<script>
+    toastr.options.positionClass = 'toast-bottom-center';
+    $(function init() {
+
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+    });
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $('#tb_users').bootstrapTable({
+                url: '/manager/getUserForTable',         //请求后台的URL（*）
+                method: 'get',                      //请求方式（*）
+                toolbar: '#toolbar',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                sortable: false,                     //是否启用排序
+                sortOrder: "asc",                   //排序方式
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageSize: 10,                       //每页的记录行数（*）
+                pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: true,
+                showColumns: true,                  //是否显示所有的列
+                showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                   //是否显示父子表
+                columns: [{
+                    checkbox: true
+                },  {
+                    field: 'username',
+                    title: '用户名'
+                }, {
+                    field: 'date',
+                    title: '注册时间'
+                }, {
+                    field: 'date',
+                    title: '创建日期'
+                }, {
+                    field: 'id',
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: actionFormatter
+                }]
+            });
+        };
+        //操作栏的格式化
+        function actionFormatter(value, row, index) {
+            var id = value;
+            var result = "";
+            result +=
+                "<a href='javascript:;'  data-toggle='modal' data-target='#myModal' onclick=\"roleDisplay('" + id +
+                "')\"class='btn btn-xs btn-success'> <span class='glyphicon glyphicon-search'></span></a>";
+            result +=
+                "<a href='javascript:;'  onclick=\"userEdit('" + id + "')\"class='btn btn-xs btn-primary' ><span class='glyphicon glyphicon-pencil'></span></a>";
+            result +=
+                "<a href='javascript:;'  onclick=\"userDelete('" + id + "')\"class='btn btn-xs btn-danger'><span class='glyphicon glyphicon-remove'></span></a>";
+
+            return result;
+        }
+
+        //得到查询的参数
+        oTableInit.queryParams = function (params) {
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //页面大小
+                offset: params.offset,  //页码
+                search: params.search //查询条件
+            };
+            return temp;
+        };
+        return oTableInit;
+    };
+    function userEdit(value) {
+        // alert("还没写呢，快催催我！");
+        toastr.warning('还没写呢，快催催我！'+value);
+    }
+
+    function userDelete(value) {
+        // alert("还没写呢，快催催我！");
+        var id=value;
+        //toastr.success('id='+id);
+        Ewin.confirm({ message: "确认要删除选择的用户吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/manager/deleteUser",
+                data: { "id": id},
+                success: function (data, status) {
+
+                    if (data["code"] == 200) {
+                        toastr.success('删除成功！');
+                        // $("#tb_departments").bootstrapTable('refresh');
+                        //getInformation()
+                        //init();
+                        //刷新表格数据
+                        $("#tb_users").bootstrapTable('destroy');
+                        var oTable = new TableInit();
+                        oTable.Init();
+                    }else{
+                        toastr.error(data["message"]);
+                    }
+                },
+                error: function () {
+                    toastr.error('删除失败，请稍后重试');
+                },
+            });
+        });
+    }
+
+   function roleDisplay(value) {
+        var id=value;
+        //toastr.success('id='+id);
+
+        $.ajax({
+            type: "post",
+            url: "/manager/listRoleById",
+            data: { "id": id},
+            success: function (data, status) {
+                $("#roleDisplay").html("")
+                var s = "<table class=\"table table-hover table-striped\">\n" +
+                    "                        <thead>\n" +
+                    "                            <th>序号</th>\n" +
+                    "                            <th>角色</th>\n" +
+                    "                            <th>描述</th><th>状态</th>\n" +
+                    "                            <th>操作</th>\n" +
+                    "                        </thead>\n" +
+                    "                        ";
+                if (data["code"] == 200) {
+                    //追加信息
+                    var map = data["object"];
+                    //这是封装的map
+
+                    $(map["hasRole"]).each(function (index,item) {
+
+                        s +="<tr>\n" +
+                            "                            <td>"+index+"</td>\n" +
+                            "                            <td>"+item.role+"</td>\n" +
+                            "                            <td>"+item.describe+"</td><td style='color: green'>已绑定</td>\n" +
+                            "                            <td><input type='hidden' value='"+item.id+"'\><span style='display: none'>"+id+"</span><button class=\"btn btn-danger\" id='reliveBindRole' >解绑</button></td>\n" +
+                            "                        </tr>"
+
+                    });
+                    var lastIndex = map["hasRole"].length;
+                    $(map["lackRole"]).each(function (index,item) {
+
+                        s +="<tr>\n" +
+                            "                            <td>"+(index+lastIndex)+"</td>\n" +
+                            "                            <td>"+item.role+"</td>\n" +
+                            "                            <td>"+item.describe+"</td><td style='color: red'>未绑定</td>\n" +
+                            "                            <td><input type='hidden' value='"+item.id+"'\><span style='display: none'>"+id+"</span><button class=\"btn btn-primary\" id='bindRole'>绑定</button></td>\n" +
+                            "                        </tr>"
+
+                    });
+                    s +="</table>";
+                    $("#roleDisplay").append(s);
+                }else{
+                    toastr.error(data["message"]);
+                }
+            },
+            error: function () {
+                toastr.error('网络异常，请稍后重试');
+            },
+        });
+
+    }
+    $("#roleDisplay").on("click","#reliveBindRole",function () {
+        //roleid
+        var roleid = $(this).siblings(" input").val();
+        //userid
+        var userid = $(this).siblings(" span").html();
+        $.ajax({
+            type:"post",
+            url:"/manager/reliveBindRole",
+            data:{"userid":userid,"roleid":roleid},
+            success:function (data) {
+                if(data["code"]==200){
+                    toastr.success("解绑成功");
+                    roleDisplay(userid);
+                }else{
+                    toastr.error(data["message"]);
+                }
+            },
+            error:function () {
+                toastr.error('网络异常，请稍后重试');
+            }
+        })
+    })
+    $("#roleDisplay").on("click","#bindRole",function () {
+        //roleid
+        var roleid = $(this).siblings(" input").val();
+        //userid
+        var userid = $(this).siblings(" span").html();
+        //toastr.success(roleid+"//"+userid);
+        $.ajax({
+            type:"post",
+            url:"/manager/bindRole",
+            data:{"userid":userid,"roleid":roleid},
+            success:function (data) {
+                if(data["code"]==200){
+                    toastr.success("绑定成功");
+                    roleDisplay(userid);
+                }else{
+                    toastr.error(data[message]);
+                }
+            },
+            error:function () {
+                toastr.error('网络异常，请稍后重试');
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>

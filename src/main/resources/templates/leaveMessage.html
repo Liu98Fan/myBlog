@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>大家一起来留言吧</title>
+    <link type="text/css" rel='stylesheet' th:href="@{/pageResources/css/bootstrap.min.css}">
+    <!-- End Bootstrap css -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link type="text/css" data-themecolor="default" rel='stylesheet'  th:href="@{/pageResources/css/main-default.css}">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/pageResources/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
+    <style type="text/css">
+        .fl{ float: left; }
+        .fr{ float: right; }
+        .wrapper{ width: 1200px; height: 300px;  margin-top:100px;}
+        .wrapper p{ padding-top: 150px; line-height: 27px; color: #999; font-size: 16px; text-align: center;  }
+        .tagcloud { position: relative;  }
+        .tagcloud a{ position: absolute;  top: 0; left: 0;  display: block; padding: 11px 30px; color: #333; font-size: 16px; border: 1px solid #e6e7e8; border-radius: 18px; background-color: #f2f4f8; text-decoration: none; white-space: nowrap;
+            -o-box-shadow: 6px 4px 8px 0 rgba(151,142,136,.34);
+            -ms-box-shadow: 6px 4px 8px 0 rgba(151,142,136,.34);
+            -moz-box-shadow: 6px 4px 8px 0 rgba(151,142,136,.34);
+            -webkit-box-shadow: 6px 4px 8px 0 rgba(151,142,136,.34);
+            box-shadow: 6px 4px 8px 0 rgba(151,142,136,.34);
+            -ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Strength=4,Direction=135, Color='#000000')";/*兼容ie7/8*/
+            filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=125, Strength=9);
+            /*strength是阴影大小，direction是阴影方位，单位为度，可以为负数，color是阴影颜色 （尽量使用数字）使用IE滤镜实现盒子阴影的盒子必须是行元素或以行元素显示（block或inline-block;）*/
+        }
+        .tagcloud a:hover{ color: #3385cf; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div th:replace="commons/header::header(activeUrl='leaveMessage')">
+
+    <!--</div>-->
+    <!--<div class="b-inner-page-header f-inner-page-header b-bg-header-inner-page">-->
+        <!--<div class="b-inner-page-header__content">-->
+
+            <!--&lt;!&ndash;长banner&ndash;&gt;-->
+            <!--<img style="width: 100%;height: 90%;" th:src="@{/pageResources/images/seal.jpg}">-->
+        <!--</div>-->
+    </div>
+    <div >
+        <!--导航栏-->
+        <div class="b-breadcrumbs f-breadcrumbs">
+            <div class="container">
+                <ul>
+                    <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
+                    <li><i class="fa fa-angle-right"></i><a href="/main/entrance">Blog</a></li>
+                    <li><i class="fa fa-angle-right"></i><span>留言娱乐</span></li>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-4">
+            <form class="layui-form" action="/tools/saveMessage" >
+
+                     <textarea id="editor" name="content"style="display: none;"  class="layui-textarea"lay-verify="content"></textarea>
+                     <br>
+                     <button type="submit" lay-submit lay-filter="sub" id="submit"class="btn btn-success fr" >提交留言</button>
+
+
+            </form>
+
+        </div>
+        <div class="col-md-8">
+            <div th:replace="commons/tagCloud::tagCloud"></div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script th:src="@{/pageResources/js/jquery-1.8.2.min.js}"></script>
+<script th:src="@{/pageResources/js/bootstrap.min.js}"></script>
+<script th:src="@{/pageResources/js/cookie.js}"></script>
+<script th:src="@{/pageResources/js/color-themes.js}"></script>
+<script type="text/javascript" th:src="@{/pageResources/js/tagcloud.js}"></script>.
+<script type="text/javascript" th:src="@{/pageResources/layui/layui.js}"></script>
+<script th:src="@{/pageResources/toastr/toastr.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+     function check (obj) {
+        var s =$("#LAY_layedit_1");//.find("body").html();
+        toastr.success(s);
+        return false;
+    }
+    $(document).ready(function(){
+        //ajax先拿到后台数据
+        /*<![CDATA[*/
+        var msg = [[${msg}]];
+        //toastr.error(msg);
+        if(msg!=null){
+            toastr.error(msg);
+        }
+
+        //getMessage();
+        /*]]>*/
+
+    });
+    function getMessage(){
+        $.ajax({
+            url: "/tools/getMessage",
+            async:false,
+            success:function (data) {
+                //获取个人介绍的信息 json解析
+                $(data).each(function (index,item) {
+                    $(".tagcloud").append("<a  href=\"#\">"+item.content+"</a>");
+                })
+
+            },
+            error:function(){
+                toastr.error("网络错误，请稍后重试");
+            }
+        })
+    }
+
+    /*3D标签云*/
+    tagcloud({
+        selector: ".tagcloud",  //元素选择器
+        fontsize: 16,       //基本字体大小, 单位px
+        radius: 150,         //滚动半径, 单位px
+        mspeed: "normal",   //滚动最大速度, 取值: slow, normal(默认), fast
+        ispeed: "normal",   //滚动初速度, 取值: slow, normal(默认), fast
+        direction: 135,     //初始滚动方向, 取值角度(顺时针360): 0对应top, 90对应left, 135对应right-bottom(默认)...
+        keep: false          //鼠标移出组件后是否继续随鼠标滚动, 取值: false, true(默认) 对应 减速至初速度滚动, 随鼠标滚动
+    });
+    layui.use(['layedit','form'], function(){
+        var layedit = layui.layedit
+            ,form = layui.form;
+        //layedit.build('editor'); //建立编辑器
+        var index = layedit.build('editor', {
+            tool: ['face']
+        });
+
+        form.on('submit(sub)', function(data) {
+            var s = layedit.getContent(index);
+            if (s.length < 1 || s == "在此留下你想说的话吧！") {
+
+                toastr.error("提交内容不可为空哦~");
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            }
+        });
+    });
+
+</script>
+</html>
