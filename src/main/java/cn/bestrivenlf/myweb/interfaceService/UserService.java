@@ -1,8 +1,6 @@
 package cn.bestrivenlf.myweb.interfaceService;
 
-import cn.bestrivenlf.myweb.entity.Page;
-import cn.bestrivenlf.myweb.entity.Role;
-import cn.bestrivenlf.myweb.entity.User;
+import cn.bestrivenlf.myweb.entity.*;
 
 import java.util.List;
 
@@ -21,4 +19,10 @@ public interface UserService {
     public boolean deleteUser(String id);
     public boolean bindRole(String userid,String roleid);
     public boolean reliveBindRole(String userid,String roleid);
+    public boolean savePermission(Permission permission);
+    public boolean saveParentPermission(ParentPermission parentPermission);
+    public Object getPermissionForTree();
+    public Object saveRole(Role role,String [] permissionList);
+    public String deleteRole(Role role);
+    public List<Permission> getPermissionByRoleId(String roleid);
 }

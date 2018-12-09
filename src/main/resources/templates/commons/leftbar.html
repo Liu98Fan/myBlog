@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
 <head>
     <title>Title</title>
     <meta charset="utf-8">
@@ -37,7 +38,8 @@
                         class="lnr lnr-home"></i> <span>图片管理</span></a></li>
                 <li><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='action'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>日迹管理</span></a></li>
-                <li>
+
+                <li shiro:hasRole="superAdmin">
                     <a href="#permissionPages" data-toggle="collapse"th:classappend="${activeUrl=='userManager'?'active':''}" class="collapsed" aria-expanded="false"><i class="lnr lnr-cog"></i> <span>权限管理</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
                     <div id="permissionPages" class="collapse">
                         <ul class="nav li-list">
@@ -77,33 +79,33 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                         <i class="lnr lnr-alarm"></i>
-                        <span class="badge bg-danger">授权信息</span>
+                        <span class="badge bg-danger">角色信息</span>
                     </a>
-                    <ul class="dropdown-menu notifications" th:each="item:${session.currentUser.roles}">
-                        <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>[[${item.role}]]</a></li>
+                    <ul class="dropdown-menu notifications" >
+                        <li th:each="item:${session.currentUser.roles}"><a href="#" class="notification-item"><span class="dot bg-warning"></span>[[${item.role}]]</a></li>
                     </ul>
                 </li>
+                <!--<li class="dropdown">-->
+                    <!--<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">-->
+                        <!--<i class="lnr lnr-alarm"></i>-->
+                        <!--<span class="badge bg-danger">5</span>-->
+                    <!--</a>-->
+                    <!--<ul class="dropdown-menu notifications">-->
+                        <!--<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a></li>-->
+                        <!--<li><a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a></li>-->
+                        <!--<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a></li>-->
+                        <!--<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a></li>-->
+                        <!--<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>-->
+                        <!--<li><a href="#" class="more">See all notifications</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-                        <i class="lnr lnr-alarm"></i>
-                        <span class="badge bg-danger">5</span>
-                    </a>
-                    <ul class="dropdown-menu notifications">
-                        <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a></li>
-                        <li><a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a></li>
-                        <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a></li>
-                        <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a></li>
-                        <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
-                        <li><a href="#" class="more">See all notifications</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-question-circle"></i> <span>Help</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-question-circle"></i> <span>授权信息（未去重）</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Basic Use</a></li>
-                        <li><a href="#">Working With Data</a></li>
-                        <li><a href="#">Security</a></li>
-                        <li><a href="#">Troubleshooting</a></li>
+                        <li th:each="item:${session.currentUser.roles}"><a th:each="obj:${item.permissions}"href="#">[[${obj.permission}]]</a></li>
+                        <!--<li><a href="#">Working With Data</a></li>-->
+                        <!--<li><a href="#">Security</a></li>-->
+                        <!--<li><a href="#">Troubleshooting</a></li>-->
                     </ul>
                 </li>
                 <li class="dropdown">

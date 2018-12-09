@@ -42,6 +42,15 @@
     <div class="main">
         <div class="main-content">
             <div class="container-fluid">
+                <div id="toolbar_role" class="btn-group">
+                    <button id="btn_add_role" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加角色
+                    </button>
+                    <button id="btn_delete_role" type="button" class="btn btn-default" onclick="deleteRole()">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除角色
+                    </button>
+                </div>
+
                 <table id="tb_users"></table>
                 <!--<div class="row" id="xianshi">-->
 
@@ -89,6 +98,7 @@
 <script th:src="@{/pageResources/assets/vendor/jquery/jquery.min.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/bootstrap/js/bootstrap.min.js}" ></script>
 <script th:src="@{/pageResources/js/bootstrap-table.js}" ></script>
+<script th:src="@{/pageResources/js/bootstrap-table-zh-CN.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}" ></script>
 <script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
@@ -112,7 +122,7 @@
             $('#tb_users').bootstrapTable({
                 url: '/manager/getUserForTable',         //请求后台的URL（*）
                 method: 'get',                      //请求方式（*）
-                toolbar: '#toolbar',                //工具按钮用哪个容器
+                toolbar: '#toolbar_role',                //工具按钮用哪个容器
                 striped: true,                      //是否显示行间隔色
                 cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
                 pagination: true,                   //是否显示分页（*）
@@ -123,8 +133,8 @@
                 pageNumber:1,                       //初始化加载第一页，默认第一页
                 pageSize: 10,                       //每页的记录行数（*）
                 pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-                search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-                strictSearch: true,
+                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: false,
                 showColumns: true,                  //是否显示所有的列
                 showRefresh: true,                  //是否显示刷新按钮
                 minimumCountColumns: 2,             //最少允许的列数
@@ -174,7 +184,7 @@
             var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 limit: params.limit,   //页面大小
                 offset: params.offset,  //页码
-                search: params.search //查询条件
+                //search: params.search //查询条件
             };
             return temp;
         };
@@ -312,7 +322,7 @@
                     toastr.success("绑定成功");
                     roleDisplay(userid);
                 }else{
-                    toastr.error(data[message]);
+                    toastr.error(data["message"]);
                 }
             },
             error:function () {

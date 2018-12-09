@@ -1,6 +1,7 @@
 package cn.bestrivenlf.myweb.config;
 
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import cn.bestrivenlf.myweb.component.MyRealm;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
@@ -40,7 +41,7 @@ public class MyshiroConfig {
         // 登录成功后要跳转的链接
         //shiroFilterFactoryBean.setSuccessUrl("/main");
         //未授权页面
-        shiroFilterFactoryBean.setUnauthorizedUrl("/authorization");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/system/unAuthorization");
 
         //自定义拦截器
         Map<String, Filter> filterMap = new LinkedHashMap<String,Filter>();
@@ -53,10 +54,12 @@ public class MyshiroConfig {
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/favicon.ico","anon");
         filterChainDefinitionMap.put("/user/**","anon");
+        filterChainDefinitionMap.put("/404.html","anon");
         filterChainDefinitionMap.put("/welcome.html","anon");
         filterChainDefinitionMap.put("/","anon");
         filterChainDefinitionMap.put("/system/loginVerify","anon");
         filterChainDefinitionMap.put("/media/music/*","anon");
+        filterChainDefinitionMap.put("/upload/markPic/*","anon");
         filterChainDefinitionMap.put("/main/entrance","anon");
         filterChainDefinitionMap.put("/main.html","anon");
         filterChainDefinitionMap.put("/register.html","anon");
@@ -144,5 +147,10 @@ public class MyshiroConfig {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
         return advisorAutoProxyCreator;
+    }
+
+    @Bean
+    public ShiroDialect shiroDialect(){
+        return new ShiroDialect();
     }
 }

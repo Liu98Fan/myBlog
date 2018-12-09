@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/font-awesome/css/font-awesome.min.css}" >
     <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/linearicons/style.css}" >
     <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
+    <link rel="stylesheet" th:href="@{/pageResources/css/bootstrap-table.css}" >
 
     <!-- MAIN CSS -->
     <link rel="stylesheet" th:href="@{/pageResources/assets/css/main.css}" >
@@ -40,12 +41,19 @@
 
     <div class="main">
         <div class="main-content">
+
+
             <div class="container-fluid">
-
-                <div class="row" id="xianshi">
-
+                <div id="toolbar_authority" class="btn-group">
+                    <button id="btn_add_role" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加权限
+                    </button>
+                    <button id="btn_delete_role" type="button" class="btn btn-default" onclick="deleteRole()">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除权限
+                    </button>
                 </div>
-                <div class="text-center" id="changePage"></div>
+                <table id="authority_table"></table>
+
             </div>
         </div>
 
@@ -56,29 +64,32 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">角色信息查询</h4>
+                    <h4 class="modal-title" id="myModalLabel">权限编辑</h4>
                 </div>
-                <div class="modal-body" id="roleDisplay">
-                    <!--<table class="table table-hover table-striped">-->
-                        <!--<thead>-->
-                        <!--<th>序号</th>-->
-                        <!--<th>角色</th>-->
-                        <!--<th>描述</th>-->
-                        <!--<th>操作</th>-->
-                        <!--</thead>-->
-                        <!--<tr>-->
-                            <!--<td>0</td>-->
-                            <!--<td>user</td>-->
-                            <!--<td>普通用户</td>-->
-                            <!--<td><button class="btn btn-danger">删除</button></td>-->
-                        <!--</tr>-->
+                <form class="form-horizontal"  onsubmit="return false">
+                <div class="modal-body" id="form">
+                    <input type="hidden" value="" id="id">
+                    <div class="form-group">
+                        <label for="describe" class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="permission" value="" required>
+                            <span style="color:red">格式:User:insertUser,必须有冒号，不能出现中文</span>
+                        </div>
+                    </div>
+                        <div class="form-group">
+                            <label for="describe" class="col-sm-2 control-label">描述</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="describe" required>
+                            </div>
+                        </div>
 
-                    <!--</table>-->
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  class="btn btn-primary" data-dismiss="modal">Close</button>
-
+                    <button type="button"  class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    <button type="submit" id="submitButton" class="btn btn-success"  onclick="savePermission(this)">提交</button>
                 </div>
+                </form>
+
             </div>
         </div>
     </div>
@@ -87,91 +98,367 @@
 <!-- Javascript -->
 <script th:src="@{/pageResources/assets/vendor/jquery/jquery.min.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/bootstrap/js/bootstrap.min.js}" ></script>
+<script th:src="@{/pageResources/js/bootstrap-table.js}" ></script>
+<script th:src="@{/pageResources/js/bootstrap-table-zh-CN.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}" ></script>
 <script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
 <script th:src="@{/pageResources/layui/layui.js}" charset="utf-8"></script>
 <script th:src="@{/pageResources/toastr/toastr.js}"></script>
-<script th:src="@{/pageResources/js/userManagerSplitPage.js}"></script>
+<!--<script th:src="@{/pageResources/js/userManagerSplitPage.js}"></script>-->
 <script th:src="@{/pageResources/js/confirmBox.js}"></script>
 <script>
     toastr.options.positionClass = 'toast-bottom-center';
-    $("#xianshi").on("click","#modifyPassword",function () {
-        // alert("还没写呢，快催催我！");
-        toastr.warning('还没写呢，快催催我！');
-    })
-    $("#xianshi").on("click","#deleteButton",function () {
-        // alert("还没写呢，快催催我！");
-        var id=$(this).siblings(" input").val();
-        //toastr.success('id='+id);
-        Ewin.confirm({ message: "确认要删除选择的用户吗？" }).on(function (e) {
-            if (!e) {
-                return;
-            }
-            $.ajax({
-                type: "post",
-                url: "/manager/deleteUser",
-                data: { "id": id},
-                success: function (data, status) {
+    $(function init() {
 
-                    if (data["code"] == 200) {
-                        toastr.success('删除成功！');
-                        // $("#tb_departments").bootstrapTable('refresh');
-                        getInformation()
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+    });
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $('#authority_table').bootstrapTable({
+                url: '/manager/getParentAuthorityForTable',         //请求后台的URL（*）
+                method: 'get',                      //请求方式（*）
+                toolbar: '#toolbar_authority',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                pagination: true, //分页
+                paginationLoop:false,
+                paginationPreText:'上一页',
+                paginationNextText:'下一页',
+                showPaginationSwitch:true,//是否显示数据条数选择框
+                sortable: false,                     //是否启用排序
+                sortOrder: "asc",                   //排序方式
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageSize: 10,                       //每页的记录行数（*）
+                pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: false,
+                showColumns: true,                  //是否显示所有的列
+                showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                contentType: "application/x-www-form-urlencoded",
+                //height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: true,                   //是否显示父子表
+                columns: [{
+                    checkbox: true
+                }, {
+                    field: 'parent',
+                    title: '父路径'
+                }, {
+                    field: 'parentDescribe',
+                    title: '描述'
+                }, {
+                    field: 'id',
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: actionFormatterForParent
+                }],
+                responseHandler: function responseHandler(data) {
+                    //这里要做分页，所以对返回的数据进行了处理
+                    return {
+                        "total": data.total,  // 总条数
+                        "rows": data.rows // 返回的数据列表（后台返回一个list集合）
+                    };
+                },
+                onExpandRow: function (index, row, $detail) {
+                    oTableInit.InitSubTable(index, row, $detail);
+                }
+            });
+        };
+        //父表操作栏的格式化
+        function actionFormatterForParent(value, row, index) {
+            var id = value;
+            var result = "";
+            result +=
+                "<a href='javascript:;'  data-toggle='modal' data-target='#myModal' onclick=\"parentDisplay(this,'" + id +
+                "')\"class='btn btn-xs btn-primary'> <span class='glyphicon glyphicon-pencil'></span></a>";
+
+
+            return result;
+        }
+        //子表操作栏的格式化
+        function actionFormatterForSon(value, row, index) {
+            var id = value;
+            var result = "";
+            result +=
+                "<a href='javascript:;'  data-toggle='modal' data-target='#myModal' onclick=\"sonDisplay(this,'" + id +
+                "')\"class='btn btn-xs btn-primary'> <span class='glyphicon glyphicon-pencil'></span></a>";
+
+
+            return result;
+        }
+        oTableInit.InitSubTable = function(index, row, $detail){
+            var parentid = row.id;
+            var parent = row.parent;
+            var cur_table = $detail.html('<table></table>').find('table');
+            $(cur_table).bootstrapTable({
+                url: '/manager/getSonAuthorityForTable',
+                method: 'get',
+                queryParams: { parentid: parentid,parent:parent},
+                ajaxOptions: { parentid: parentid,parent:parent},
+                clickToSelect: true,
+                detailView: false,//父子表
+                uniqueId: "MENU_ID",
+                pageSize: 10,
+                pageList: [10, 25],
+                columns: [{
+                    checkbox: true
+                }, {
+                    field: 'permission',
+                    title: '权限名称'
+                }, {
+                    field: 'describe',
+                    title: '描述'
+                }, {
+                    field: 'id',
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: actionFormatterForSon
+                }],
+            });
+        };
+
+        //得到查询的参数
+        oTableInit.queryParams = function (params) {
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //页面大小
+                offset: params.offset,  //页码
+                //search: params.search //查询条件
+            };
+            return temp;
+        };
+        return oTableInit;
+    };
+    /**
+    function authorityDisplay(obj,id){
+        //// 千万不可以更改元素位置！
+        // 千万不可以更改元素位置！
+        // 千万不可以更改元素位置！
+        var describe = $(obj).parent().prev().html();
+        var url = $(obj).parent().prev().prev().html();
+        //toastr.success(url);
+
+        if($(obj).parent().siblings().length>4){
+            //这里获取到子节点的默认url和描述是有一个前提的，就是表格中的元素位置千万不能动！
+            //这里没有好的获取值的办法，只有通过坐标来获取了，所以千万不可以更改元素位置！
+            // 千万不可以更改元素位置！
+            // 千万不可以更改元素位置！
+            // 千万不可以更改元素位置！
+            $("#myModalLabel").html("子节点编辑");
+            var url = $($(obj).parent().siblings()[1]).html();
+            var describe = $($(obj).parent().siblings()[3]).html();
+        }else {
+            $("#myModalLabel").html("父节点编辑");
+        }
+        $("#url").val(url);
+        $("#describe").val(describe);
+        $("#id").val(id);
+    }
+    function saveParentUrl(obj) {
+        var url = $("#url").val();
+        var describe = $("#describe").val();
+        var id = $("#id").val();
+        var isAuthority = $("#isAuthority option:selected").val();
+        if($("#myModalLabel").html().indexOf("子")!=-1){
+            //子路径保存
+            //toastr.success("子");
+            $.ajax({
+                url:'/manager/savePermission',
+                data:{"id":id,"describe":describe,"permission":url,"isAuthority":isAuthority},
+                success:function (data) {
+                    if(data["code"]==200){
+                        toastr.success("提交成功");
+                        //取消模态框
+                        $(" body").removeClass("modal-open");
+                        $(".modal-backdrop").remove();
+                        $(".modal").removeClass("in")
+                        //刷新表格数据
+                        $("#authority_table").bootstrapTable('destroy');
+                        var oTable = new TableInit();
+                        oTable.Init();
                     }else{
                         toastr.error(data["message"]);
                     }
+                    //toastr.success("success");
                 },
-                error: function () {
-                    toastr.error('删除失败，请稍后重试');
-                },
-            });
-        });
-    })
-
-    $("#xianshi").on("click","#displayRoleButton",function () {
-        var id=$(this).siblings(" input").val();
-        //toastr.success('id='+id);
-
-        $.ajax({
-            type: "post",
-            url: "/manager/listRoleById",
-            data: { "id": id},
-            success: function (data, status) {
-                $("#roleDisplay").html("")
-                var s = "<table class=\"table table-hover table-striped\">\n" +
-                    "                        <thead>\n" +
-                    "                            <th>序号</th>\n" +
-                    "                            <th>角色</th>\n" +
-                    "                            <th>描述</th>\n" +
-                    "                            <th>操作</th>\n" +
-                    "                        </thead>\n" +
-                    "                        ";
-                if (data["code"] == 200) {
-                    //追加信息
-                    $(data["object"]).each(function (index,item) {
-
-                        s +="<tr><input type='hidden' value='"+item.id+"'\>\n" +
-                            "                            <td>"+index+"</td>\n" +
-                            "                            <td>"+item.role+"</td>\n" +
-                            "                            <td>"+item.describe+"</td>\n" +
-                            "                            <td><button class=\"btn btn-danger\">删除</button></td>\n" +
-                            "                        </tr>"
-
-                    });
-                    s +="</table>";
-                    $("#roleDisplay").append(s);
-                }else{
-                    toastr.error(data["message"]);
+                error:function () {
+                    toastr.error("error");
                 }
-            },
-            error: function () {
-                toastr.error('网络异常，请稍后重试');
-            },
-        });
+            })
+        }else{
+            //父路径保存
+            $.ajax({
+                url:'/manager/saveParentUrl',
+                data:{"id":id,"describe":describe,"url":url,"isAuthority":isAuthority},
+                success:function (data) {
+                    if(data["code"]==200){
+                        toastr.success("提交成功");
+                        //取消模态框
+                        $(" body").removeClass("modal-open");
+                        $(".modal-backdrop").remove();
+                        $(".modal").removeClass("in")
+                        //刷新表格数据
+                        $("#authority_table").bootstrapTable('destroy');
+                        var oTable = new TableInit();
+                        oTable.Init();
+                    }else{
+                        toastr.error(data["message"]);
+                    }
+                    //toastr.success("success");
+                },
+                error:function () {
+                    toastr.error("error");
+                }
+            })
+        }
 
-    })
-
+    }
+    **/
+     /**
+     * 父表按钮单击事件
+     * 1、弹出模态框
+     * 2、追加父节点标识
+     * 3、写入父节点数据
+     * 4、修改模态框按钮单击时间为保存父节点信息
+     */
+    function parentDisplay(obj,id){
+        //2、追加父节点标识
+        $("#myModalLabel").html("父节点权限编辑");
+        //3、写入父节点数据
+        var parent = $(obj).parent().prev().prev().html();
+        var describe = $(obj).parent().prev().html();
+            //这里不能修改父节点的parent数据，否则就乱了
+            $("#permission").attr("disabled","disbaled");
+            $("#permission").val(parent);
+            //但是可以修改父节点describe数据
+            $("#describe").val(describe);
+        //4、修改模态框按钮单击时间为保存父节点信息
+        $("#submitButton").attr("onclick","saveParentPermission(this,'"+id+"')");
+    }
+    /**
+     * 子表按钮单击事件
+     * 1、弹出模态框
+     * 2、追加父节点标识
+     * 3、写入父节点数据
+     * 4、修改模态框按钮单击时间为保存父节点信息
+     */
+    function sonDisplay(obj,id){
+        //2、追加父节点标识
+        $("#myModalLabel").html("子节点权限编辑");
+        //3、写入父节点数据
+        var permission = $(obj).parent().prev().prev().html();
+        var describe = $(obj).parent().prev().html();
+        $("#permission").val(permission);
+        //但是可以修改父节点describe数据
+        $("#describe").val(describe);
+        //4、修改模态框按钮单击时间为保存父节点信息
+        $("#submitButton").attr("onclick","savePermission(this,'"+id+"')");
+    }
+    /**
+     * 编辑父节点方法
+     */
+    function saveParentPermission(obj,id) {
+        var parent = $("#permission").val();
+        var parentDescribe = $("#describe").val();
+        var parentId = id;
+        if(parentDescribe=="undefined"||parentDescribe=="-"){
+            toastr.error("描述非法");
+        }else{
+            $.ajax({
+                url:'/manager/saveParentPermission',
+                data:{"parent":parent,"parentDescribe":parentDescribe,"parentId":parentId},
+                success:function (data) {
+                    if(data["code"]==200) {
+                        toastr.success("提交成功");
+                        //取消模态框
+                        $('#myModal').modal('toggle');
+                        //刷新模态框数据
+                        $("#permission").val("");
+                        $("#describe").val("");
+                        $("#submitButton").attr("onclick","savePermission(this)");
+                        $("#permission").removeAttr("disabled");
+                        //刷新表格数据
+                        $("#authority_table").bootstrapTable('destroy');
+                        var oTable = new TableInit();
+                        oTable.Init();
+                    }
+                },
+                error:function () {
+                    toastr.error("保存失败");
+                }
+            })
+        }
+    }
+    /**
+     * 添加权限方法 对应表单提交方法
+     */
+    function savePermission(obj,id){
+        var permission = $("#permission").val();
+        var describe = $("#describe").val();
+        //判断非法
+        var mark = checkPermission(permission);
+        if(!mark){
+            toastr.error("权限名称非法！");
+        }else{
+            //合法以后进行ajax插入
+            $.ajax({
+                url:'/manager/savePermission',
+                data:{"permission":permission,"describe":describe,"id":id},
+                async:true,
+                success:function (data) {
+                    if(data["code"]==200) {
+                        toastr.success("提交成功");
+                        //取消模态框
+                        $('#myModal').modal('toggle');
+                        //刷新模态框数据
+                        $("#permission").val("");
+                        $("#describe").val("");
+                        $("#submitButton").attr("onclick","savePermission(this)");
+                        //刷新表格数据
+                        $("#authority_table").bootstrapTable('destroy');
+                        var oTable = new TableInit();
+                        oTable.Init();
+                    }
+                },
+                error:function () {
+                    toastr.error("保存失败！");
+                }
+            })
+        }
+    }
+    /**
+     * 判断权限定义是否合法
+     * 1、是否有'：'
+     * 2、是否包含中文
+     */
+    function  checkPermission(permission) {
+        //判断是否包含：
+        if(permission.indexOf(":")!=-1){
+            //判断是否包含中文
+            var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+            if(!reg.test(permission)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 </script>
 
 </body>

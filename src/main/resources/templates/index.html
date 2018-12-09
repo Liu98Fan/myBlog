@@ -4,7 +4,7 @@
 <!--[if IE 8 ]>    <html lang="en-gb" class="isie ie8 oldie no-js"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en-gb" class="isie ie9 no-js"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
-<html lang="en-gb" class="no-js" xmlns:th="http://www.thymeleaf.org">
+<html lang="en-gb" class="no-js" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <!--<![endif]-->
 <head>
     <meta charset="utf-8">
@@ -57,8 +57,14 @@
                     <li><a href="/tools/leaveMessage" th:href="@{/tools/leaveMessage}"
                            class="scroll-link">留言娱乐
                     </a></li>
-                    <li><a href="/backPages/center.html" th:href="@{/center/entrance}"
+                    <li shiro:hasRole="admin"><a href="/backPages/center.html" th:href="@{/center/entrance}"
                            class="scroll-link">后台
+                    </a></li>
+                    <li shiro:notAuthenticated=""><a href="/user/loginEntrance" th:href="@{/center/entrance}"
+                                         class="scroll-link">登陆
+                    </a></li>
+                    <li shiro:notAuthenticated=""><a href="/user/registerEntrance" th:href="@{/center/entrance}"
+                                                     class="scroll-link">注册
                     </a></li>
                 </ul>
             </div>

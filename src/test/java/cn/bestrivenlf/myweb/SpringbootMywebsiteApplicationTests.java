@@ -1,11 +1,14 @@
 package cn.bestrivenlf.myweb;
 
 import cn.bestrivenlf.myweb.entity.Note;
+import cn.bestrivenlf.myweb.entity.Permission;
 import cn.bestrivenlf.myweb.interfaceDao.TraceDao;
+import cn.bestrivenlf.myweb.interfaceDao.UserDao;
 import cn.bestrivenlf.myweb.interfaceService.BaseService;
 
 import cn.bestrivenlf.myweb.interfaceService.NoteService;
 import cn.bestrivenlf.myweb.interfaceService.TraceService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
@@ -19,9 +22,15 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -40,7 +49,11 @@ public class SpringbootMywebsiteApplicationTests {
     @Autowired
     TraceDao traceDao;
     @Autowired
+    UserDao userDao;
+    @Autowired
     JavaMailSenderImpl mailSender;
+    @Autowired
+    WebApplicationContext webApplicationContext;
 
 
     @Test
@@ -108,6 +121,44 @@ public class SpringbootMywebsiteApplicationTests {
         Object en2 =new SimpleHash("MD5","admin");
         System.out.println(encrypt.toString());
         System.out.println(en2.toString());
+    }
+    @Test
+    public void getAllUrl(){
+        JSONArray jsonArray = (JSONArray) baseService.getAllUrlMapping();
+        System.out.println(jsonArray.size());
+    }
+    @Test
+    public void testSplit(){
+        String url = "/center/ta";
+        System.out.println(url.split("/")[2]);
+    }
+    @Test
+    public void testTree(){
+        List<Permission> permissionList = userDao.getPermissionForTree();
+        //进行删选组装
+       JSONArray jsonArray = new JSONArray();
+        while(permissionList.size()>0){
+            JSONObject json = new JSONObject();
+            Permission parent = permissionList.get(0);
+            json.put("parent",parent);
+            List<Permission> permissions = new ArrayList<>();
+            List<Integer> indexs = new ArrayList<>();
+            for(int i = 0;i<permissionList.size();i++){
+                if(permissionList.get(i).getParent().equals(parent.getParent())){
+                    indexs.add(i);
+                }
+            }
+            //剔除
+            for(int j = indexs.size()-1;j>=0;j--){
+                permissions.add(permissionList.get(indexs.get(j)));
+                permissionList.remove((int)indexs.get(j));
+            }
+            //加入json
+            json.put("son",permissions);
+            //加入json数组
+            jsonArray.add(json);
+        }
+        System.out.println(jsonArray.toString());
     }
 
 //    public void test(){

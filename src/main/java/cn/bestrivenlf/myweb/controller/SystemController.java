@@ -44,4 +44,9 @@ public class SystemController {
         PrintWriter out = response.getWriter();
         out.println(resStr);
     }
+
+    @RequestMapping("/unAuthorization")
+    public String unAuthorization(){
+        return "404";
+    }
 }

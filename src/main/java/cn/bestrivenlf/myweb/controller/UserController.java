@@ -30,6 +30,17 @@ public class UserController {
     private UserService userService;
     @Autowired
     private BaseService baseService;
+
+    /**
+     * 登陆认证
+     * @param username
+     * @param password
+     * @param isEncrypt
+     * @param model
+     * @param session
+     * @param request
+     * @return
+     */
     @RequestMapping("/login")
     public String login(String username, String password, @RequestParam(value = "isEncrypt",defaultValue = "0") String isEncrypt, Model model, HttpSession session, HttpServletRequest request){
         String servername = request.getServerName();
@@ -76,6 +87,13 @@ public class UserController {
     public String loginEntrance(){
         return "login";
     }
+
+    /**
+     * 注册
+     * @param user
+     * @param model
+     * @return
+     */
     @RequestMapping("/register")
     public String register(User user,Model model){
         String password = user.getPassword();
@@ -93,12 +111,24 @@ public class UserController {
         }
 
     }
+
+    /**
+     * 登出
+     * @param session
+     * @return
+     */
     @RequestMapping("/logout")
     public String logOut(HttpSession session){
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return "redirect:/user/loginEntrance";
     }
+
+    /**
+     * 检测用户名是否合法
+     * @param username
+     * @return
+     */
     @RequestMapping("/checkUsername")
     @ResponseBody
     public Object checkUsername(String username){

@@ -1,10 +1,12 @@
 package cn.bestrivenlf.myweb.serviceImpl;
 
-import cn.bestrivenlf.myweb.entity.Page;
-import cn.bestrivenlf.myweb.entity.User;
+import cn.bestrivenlf.myweb.entity.*;
 import cn.bestrivenlf.myweb.interfaceDao.ManagerDao;
+import cn.bestrivenlf.myweb.interfaceService.BaseService;
 import cn.bestrivenlf.myweb.interfaceService.ManagerService;
-import org.apache.shiro.util.ByteSource;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,12 @@ import java.util.List;
  * @date:2018/11/22
  */
 @Service
+@Aspect
 public class ManagerServiceImpl implements ManagerService {
     @Autowired
     private ManagerDao managerDao;
+    @Autowired
+    private BaseService baseService;
     @Override
     public List<User> getAllUser() {
         return  managerDao.getAllUser();
@@ -45,5 +50,86 @@ public class ManagerServiceImpl implements ManagerService {
             return false;
         }
 
+    }
+
+    /**
+     * 将项目中的mapping存入数据库
+     * @param jsonArray
+     * @return
+     */
+    @Override
+    //@Before(value = "execution(* cn.bestrivenlf.myweb.controller.ManagerController.getParentAuthorityForTable(..))")
+    public boolean saveMapping() {
+        JSONArray jsonArray = (JSONArray) baseService.getAllUrlMapping();
+        boolean mark = true;
+        for(Object object:jsonArray){
+            JSONObject jsonObject = (JSONObject)object;
+            UrlMapping urlMapping = new UrlMapping();
+            urlMapping.setClassName(jsonObject.getString("className"));
+            urlMapping.setIsAuthority(0);
+            urlMapping.setMethodName(jsonObject.getString("method"));
+            urlMapping.setUrl(jsonObject.getString("url"));
+            String url = urlMapping.getUrl();
+            String parentUrl = url.split("/")[1];
+            //这里可能会抛出ArrayIndexOutOfBoundsException
+            String sonUrl = null;
+            try{
+              sonUrl = url.split("/")[2];
+            }catch (ArrayIndexOutOfBoundsException e){
+                continue;
+            }
+            urlMapping.setParentMapping(parentUrl);
+            urlMapping.setSonMapping(sonUrl);
+            String s = managerDao.saveMapping(urlMapping);
+            if(s.equals("error")){
+                mark = false;
+            }
+        }
+        return mark;
+    }
+
+    /**
+     * 获取urlMapping的总数
+     * @return
+     */
+    @Override
+    public int getAuthorityCount() {
+        return managerDao.getAuthorityCount();
+    }
+
+    /**
+     * 获取urlMapping 分页数据
+     * @param page
+     * @return
+     */
+    @Override
+    public List<UrlMapping> getAuthorityForTable(Page page) {
+        int start = page.getStart();
+        int end = page.getLimit();
+        List<UrlMapping> urlMapping =  managerDao.getAuthorityForTable(start,end);
+        return urlMapping;
+    }
+
+    @Override
+    public List<ParentPermission> getParentAuthorityForTable(Page page) {
+        int start = page.getStart();
+        int end = page.getLimit();
+        List<ParentPermission> parentPermission =  managerDao.getParentAuthorityForTable(start,end);
+        return parentPermission;
+    }
+
+    @Override
+    public List<Permission> getSonAuthorityForTable(String parent) {
+        return managerDao.getSonAuthorityForTable(parent);
+    }
+
+    @Override
+    public int getParentAuthorityCount() {
+        return managerDao.getParentAuthorityCount();
+    }
+
+    @Override
+    public boolean saveParentUrl(UrlMapping parentUrl) {
+        return managerDao.saveParentUrl(parentUrl).equals("succ")?true:false;
     }
 }

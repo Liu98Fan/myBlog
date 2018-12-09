@@ -45,8 +45,9 @@ public class Page {
 	}
 	public int getCurrentResult() {
 		currentResult = (getCurrentPage()-1)*getLimit();
-		if(currentResult<0)
+		if(currentResult<0) {
 			currentResult = 0;
+		}
 		return currentResult;
 	}
 	public void setCurrentResult(int currentResult) {

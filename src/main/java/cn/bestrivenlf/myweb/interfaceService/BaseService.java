@@ -19,4 +19,5 @@ public interface BaseService {
     public Object ConvertSaltByte(String salt);
     public JSONObject getAjaxResult(Boolean mark,int errorCode,String errorMessage);
     public JSONObject getAjaxResultHasObject(Boolean mark,int errorCode,String errorMessage,Object object);
+    public Object getAllUrlMapping();
 }

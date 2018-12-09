@@ -1,11 +1,13 @@
 package cn.bestrivenlf.myweb.interfaceDao;
 
+import cn.bestrivenlf.myweb.entity.ParentPermission;
 import cn.bestrivenlf.myweb.entity.Permission;
 import cn.bestrivenlf.myweb.entity.Role;
 import cn.bestrivenlf.myweb.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -44,4 +46,32 @@ public interface UserDao {
     public String bindRole(String userid,String roleid);
     @Select("call bindRole(#{param1},#{param2},1)")
     public String reliveBindRole(String userid,String roleid);
+    @Select("call savePermission(#{id},#{permission},#{describe},#{date},#{newdate},#{del_flag},#{parentId},#{parent})")
+    public String savePermission(Permission permission);
+    @Select("update parent_permission_tb set `describe` = #{parentDescribe},del_flag = #{del_flag} where id = #{parentId}")
+    public String saveParentPermission(ParentPermission parentPermission);
+    @Select("select \n" +
+            "a.id as 'id',\n" +
+            "a.permission as 'permission',\n" +
+            "a.`describe` as 'describe',\n" +
+            "a.date as 'date',\n" +
+            "a.newdate as 'newdate',\n" +
+            "c.id as 'parentid',\n" +
+            "c.parent as 'parent',\n" +
+            "c.`describe` as 'parentdescribe',\n" +
+            "a.del_flag as'del_flag' \n" +
+            " from permission_tb a \n" +
+            "LEFT JOIN parent_permission_relation_tb b on a.id = b.permissionid \n" +
+            "LEFT JOIN parent_permission_tb c on b.parentid = c.id  ")
+    public List<Permission>getPermissionForTree();
+    @Select("call saveRole(#{id},#{role},#{describe},#{date},#{newdate},#{del_flag})")
+    public String saveRole(Role role);
+    @Select("call insertPermissionToRole(#{id},#{permission})")
+    public String insertPermissionToRole(String id, String permission);
+    @Select("select * from role_tb where id = #{id} and del_flag = 0")
+    public Role getRoleById(String id);
+    @Update("update role_permission_tb set del_flag = 1 where roleid=#{id} and permissionid=#{pid}")
+    public void deleteRolePermission(String id, String pid);
+    @Select("select count(*) from role_tb where role = #{role}")
+    public int checkRole(String role);
 }

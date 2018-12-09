@@ -6,6 +6,8 @@ import cn.bestrivenlf.myweb.entity.TacModel;
 import cn.bestrivenlf.myweb.interfaceService.CenterService;
 import cn.bestrivenlf.myweb.interfaceService.NoteService;
 import net.sf.json.JSONArray;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
  */
 @Controller
 @RequestMapping("/center")
+
 public class CenterController {
     @Autowired
     private CenterService centerService;
@@ -64,7 +67,6 @@ public class CenterController {
         }
         return "success";
     }
-
     @RequestMapping(value = "/getDescription")
     @ResponseBody
     @Cacheable(cacheNames = {"description"},key = "#root.getMethodName()+'['+#mark+']'")
@@ -80,7 +82,7 @@ public class CenterController {
             return "error";
         }
     }
-
+    @RequiresRoles(value = {"admin","superAdmin"},logical = Logical.OR)
     @RequestMapping(value = "/entrance")
     public String entrance(Model model){
         return "backPages/center";

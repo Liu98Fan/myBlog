@@ -1,20 +1,23 @@
 package cn.bestrivenlf.myweb.controller;
 
-import cn.bestrivenlf.myweb.entity.Page;
-import cn.bestrivenlf.myweb.entity.Role;
-import cn.bestrivenlf.myweb.entity.User;
+import cn.bestrivenlf.myweb.entity.*;
 import cn.bestrivenlf.myweb.interfaceService.BaseService;
 import cn.bestrivenlf.myweb.interfaceService.ManagerService;
 import cn.bestrivenlf.myweb.interfaceService.UserService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,9 +82,9 @@ public class ManagerController {
     @RequestMapping("/getUserForTable")
     @ResponseBody
     public Object getUserForTable(int limit,int offset,String search){
-        int start = (offset)*limit;
+        int start = offset;
         Page page = new Page(start,limit);
-        page.setCurrentPage(offset+1);
+        page.setCurrentPage(offset==0?1:offset/limit);
         page.setTotal(userService.getUserCount());
         List<User> userList;
         if(search!=""&&search!=null){
@@ -144,10 +147,10 @@ public class ManagerController {
      */
     @ResponseBody
     @RequestMapping("/getRoles")
-    public Object getRolesForPage(int limit,int offset){
-        int start = (offset)*limit;
+    public Object getRolesForTable(int limit,int offset){
+        int start = offset;
         Page page = new Page(start,limit);
-        page.setCurrentPage(offset+1);
+        page.setCurrentPage(offset==0?1:offset/limit);
         page.setTotal(userService.getRoleCount());
         List<Role> roleList = userService.getRoleForPage(page);
         page.setRoot(roleList);
@@ -163,7 +166,7 @@ public class ManagerController {
      * @param roleid
      * @return
      */
-    @RequestMapping("bindRole")
+    @RequestMapping("/bindRole")
     @ResponseBody
     public Object bindRole(String userid,String roleid){
         boolean mark = userService.bindRole(userid, roleid);
@@ -177,11 +180,179 @@ public class ManagerController {
      * @param roleid
      * @return
      */
-    @RequestMapping("reliveBindRole")
+    @RequestMapping("/reliveBindRole")
     @ResponseBody
     public Object reliveBindRole(String userid,String roleid){
         boolean mark = userService.reliveBindRole(userid, roleid);
         JSONObject json = baseService.getAjaxResult(mark,5002,"无法解绑");
         return json;
     }
+
+    /**
+     * 获取权限（所有的url地址）的AJAX请求
+     * 在这个方法前会先执行一下更新数据库中的url操作
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getAuthorityForTable")
+    public Object getAuthorityForTable(int limit,int offset){
+        int start = offset;
+        Page page = new Page(start,limit);
+        page.setCurrentPage(offset==0?1:offset/limit);
+        page.setTotal(managerService.getAuthorityCount());
+        List<UrlMapping> roleList = managerService.getAuthorityForTable(page);
+        page.setRoot(roleList);
+        JSONObject json = new JSONObject();
+        json.put("total",page.getTotal());
+        json.put("rows",page.getRoot());
+        return json;
+    }
+
+    /**
+     * 父路径获取
+     * @param limit
+     * @param offset
+     * @return
+     */
+    @Cacheable(cacheNames = "permission",key = "'parentAuthority('+#limit+','+#offset+')'")
+    @ResponseBody
+    @RequestMapping("/getParentAuthorityForTable")
+    public Object getParentAuthorityForTable(int limit,int offset){
+        int start = offset;
+        Page page = new Page(start,limit);
+        page.setCurrentPage(offset==0?1:offset/limit);
+        page.setTotal(managerService.getParentAuthorityCount());
+        List<ParentPermission> parentPermissionList = managerService.getParentAuthorityForTable(page);
+        page.setRoot(parentPermissionList);
+        JSONObject json = new JSONObject();
+        json.put("total",page.getTotal());
+        json.put("rows",page.getRoot());
+        return json;
+    }
+
+    /**
+     * 子路径获取
+     * @param parentid
+     * @param parentMapping
+     * @return
+     */
+    @Cacheable(cacheNames = "permission",key = "'sonAuthority.'+#parentid")
+    @ResponseBody
+    @RequestMapping("/getSonAuthorityForTable")
+    public Object getSonAuthorityForTable(String parentid,String parent){
+        JSONObject json = new JSONObject();
+        json.put("rows",managerService.getSonAuthorityForTable(parentid));
+        return json;
+    }
+
+    /**
+     * Ajax请求 存储/更新 父url数据
+     * @param describe
+     * @param isAuthority
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/saveParentUrl")
+    public Object saveParentUrl(UrlMapping parentUrl){
+        boolean mark = managerService.saveParentUrl(parentUrl);
+        JSONObject json = baseService.getAjaxResult(mark,5003,"无法保存父节点");
+        return json;
+    }
+
+    /**
+     * 权限管理页面的添加权限
+     * @param permission
+     * @return
+     */
+    @CacheEvict(cacheNames = "permission",allEntries = true)
+    @ResponseBody
+    @RequestMapping("/savePermission")
+    public Object savePermission(Permission permission){
+        //首先获取父节点名称
+        String parent = permission.getPermission().split(":")[0];
+        permission.setParent(parent);
+        permission.setNewdate(permission.getDate());
+        boolean mark = userService.savePermission(permission);
+        JSONObject json = baseService.getAjaxResult(mark,5004,"无法保存权限");
+        return json;
+
+    }
+
+    /**
+     * 权限管理页面对父路经的编辑操作
+     * @param parentPermission
+     * @return
+     */
+    @CacheEvict(cacheNames = "permission",allEntries = true)
+    @ResponseBody
+    @RequestMapping("/saveParentPermission")
+    public Object saveParentPermission(ParentPermission parentPermission){
+        boolean mark = userService.saveParentPermission(parentPermission);
+        JSONObject json = baseService.getAjaxResult(mark,5004,"无法保存权限");
+        return json;
+    }
+
+    /**
+     * 获取permission数据
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getPermissionForTree")
+    public Object getPermissionForTree(){
+        JSONArray jsonArray = (JSONArray) userService.getPermissionForTree();
+        return jsonArray;
+    }
+
+    /**
+     * 保存角色信息
+     * 这是添加/修改/删除 角色的通用方法
+     * @param role
+     * @param describe
+     * @param permissionList
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/saveRole")
+    public Object saveRole(Role role, String [] permissionList){
+//        if(role.getId().length()<32){
+//            Role temp = new Role();
+//            role.setId(temp.getId());
+//        }在service里面进行了判断是否是新建的角色
+        role.setNewdate(role.getDate());
+        //初始化role结束。下面开始考虑如何保存
+        //这里最关键的就是permission和role的关联数据，permission全部都在数据库中，所以只传了它的id
+        //算了，先进入service吧
+        String message = (String)userService.saveRole(role, permissionList);
+        JSONObject ajaxResult = new JSONObject();
+        if(message.equals("succ")){
+             ajaxResult = baseService.getAjaxResult(true, -1, message);
+        }else {
+             ajaxResult = baseService.getAjaxResult(false, 5006, message);
+        }
+        return ajaxResult;
+    }
+
+    /**
+     * roleManager页面删除单个角色按钮
+     * @param role
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/deleteRole")
+    public Object deleteRole(Role role){
+        String mark = userService.deleteRole(role);
+        return baseService.getAjaxResult(mark.equals("succ")?true:false,5007,mark);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getPermissionByRoleId")
+    public Object getPermissionByRoleId(String roleid){
+        List<Permission> permissionList = userService.getPermissionByRoleId(roleid);
+        List<String> idList = new ArrayList<>();
+        for(Permission p:permissionList){
+            idList.add(p.getId());
+        }
+        return baseService.getAjaxResultHasObject(true,-1,"-1",idList);
+    }
+
 }

@@ -1,19 +1,15 @@
 package cn.bestrivenlf.myweb.entity;
 
-public class Permission extends BaseEntity{
+public class Permission extends ParentPermission{
 	private String permission;
 	private String describe;
     private String newdate;
-
-	public Permission(String id) {
-		super(id);
-	}
 
 	public Permission() {
 		super();
 	}
 
-    public String getNewdate() {
+	public String getNewdate() {
         return newdate;
     }
 
