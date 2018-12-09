@@ -38,6 +38,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
             public void addViewControllers(ViewControllerRegistry registry) {
                 registry.addViewController("/main.html").setViewName("redirect:/main/entrance");
                 registry.addViewController("/").setViewName("welcome.html");
+                registry.addViewController("/firstPage").setViewName("redirect:/");
 //                registry.addViewController("index").setViewName("redirect:/center/entrance");
             }
             //注册拦截器

@@ -66,11 +66,11 @@ public interface UserDao {
     public List<Permission>getPermissionForTree();
     @Select("call saveRole(#{id},#{role},#{describe},#{date},#{newdate},#{del_flag})")
     public String saveRole(Role role);
-    @Select("call insertPermissionToRole(#{id},#{permission})")
+    @Select("call insertPermissionToRole(#{param1},#{param2})")
     public String insertPermissionToRole(String id, String permission);
     @Select("select * from role_tb where id = #{id} and del_flag = 0")
     public Role getRoleById(String id);
-    @Update("update role_permission_tb set del_flag = 1 where roleid=#{id} and permissionid=#{pid}")
+    @Update("update role_permission_tb set del_flag = 1 where roleid=#{param1} and permissionid=#{param2}")
     public void deleteRolePermission(String id, String pid);
     @Select("select count(*) from role_tb where role = #{role}")
     public int checkRole(String role);

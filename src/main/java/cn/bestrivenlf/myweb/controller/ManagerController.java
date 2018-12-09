@@ -264,6 +264,7 @@ public class ManagerController {
      * @param permission
      * @return
      */
+   // @RequiresPermissions("permission:insertPermission")
     @CacheEvict(cacheNames = "permission",allEntries = true)
     @ResponseBody
     @RequestMapping("/savePermission")
@@ -337,6 +338,7 @@ public class ManagerController {
      * @param role
      * @return
      */
+    //@RequiresPermissions("role:deleteRole")
     @ResponseBody
     @RequestMapping("/deleteRole")
     public Object deleteRole(Role role){

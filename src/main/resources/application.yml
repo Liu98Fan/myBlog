@@ -26,7 +26,7 @@ spring:
 
   mail:
     username: 214704958@qq.com
-    password: xx
+    password: shzhyytuphnbbjea
     host: smtp.qq.com
     properties:
       mail:
@@ -36,7 +36,7 @@ spring:
   rabbitmq:
     host: 120.78.209.159
     username: guest
-    password: xx
+    password: guest
   redis:
     host: 120.78.209.159
   messages:
@@ -52,7 +52,7 @@ spring:
     cache: false
   datasource:
     username: myWebsite
-    password: xx
+    password: 60085040
     url: jdbc:mysql://120.78.209.159:3306/myWebsite?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     #url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&amp;characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver #指定驱动

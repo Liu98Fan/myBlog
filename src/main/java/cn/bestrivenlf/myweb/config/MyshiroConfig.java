@@ -2,6 +2,7 @@ package cn.bestrivenlf.myweb.config;
 
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import cn.bestrivenlf.myweb.component.MyExceptionResolver;
 import cn.bestrivenlf.myweb.component.MyRealm;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
@@ -13,6 +14,7 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -152,5 +154,11 @@ public class MyshiroConfig {
     @Bean
     public ShiroDialect shiroDialect(){
         return new ShiroDialect();
+    }
+
+    @Bean
+    public HandlerExceptionResolver solver(){
+        HandlerExceptionResolver handlerExceptionResolver=new MyExceptionResolver();
+        return handlerExceptionResolver;
     }
 }
