@@ -3,7 +3,7 @@
 <!--[if IE 8 ]>    <html lang="en-gb" class="isie ie8 oldie no-js"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en-gb" class="isie ie9 no-js"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <link th:href="@{/pageResources/css/bootstrap.min.css}" rel="stylesheet"
           type="text/css" media="all" />
@@ -14,11 +14,11 @@
     <!-- jQuery (necessary JavaScript plugins) -->
     <script type="text/javascript" th:src="@{/pageResources/js/jquery-1.8.2.min.js}"></script>
     <!--//theme-style-->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Game Spot Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template,
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
-    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
     <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <![endif]-->
@@ -27,7 +27,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <link th:href="@{/pageResources/assets/css/font-awesome.min.css}" rel="stylesheet" />
     <!-- CUSTOM STYLE CSS -->
     <link th:href="@{/pageResources/assets/css/style.css}" rel="stylesheet" />
-    <script th:href="@{/pageResources/layui/layui.js}"></script>
+    <link rel="stylesheet" th:href="@{/pageResources/css/commentStyle.css}">
+    <link rel="stylesheet" th:href="@{/pageResources/css/comment.css}">
+    <link rel="stylesheet" th:href="@{/pageResources/css/LfCss.css}">
+    <link rel="stylesheet" th:href="@{/pageResources/toastr/toastr.css}">
+    <style type="text/css">
+        html{
+            font-family: 'Open Sans', sans-serif!important;
+            font-size: 100%;
+            background: #ffffff;
+        }
+        .hr-grey{
+            border-top:1px solid #b3afaf;
+        }
+        .userBox{
+            border: 1px solid #b7acac;
+            background-color: #e0dbdb
+        }
+        .dispaly-none{
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
 <div id="header">
@@ -43,14 +64,58 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
     </div>
 </div>
+<div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">查看相关资源</h4>
+            </div>
+            <div class="modal-body" id="resourceBody">
+                <!--<table class="table table-hover table-striped">-->
+                <!--<thead>-->
+                <!--<th>序号</th>-->
+                <!--<th>角色</th>-->
+                <!--<th>描述</th>-->
+                <!--<th>操作</th>-->
+                <!--</thead>-->
+                <!--<tr>-->
+                <!--<td>0</td>-->
+                <!--<td>user</td>-->
+                <!--<td>普通用户</td>-->
+                <!--<td><button class="btn btn-danger">删除</button></td>-->
+                <!--</tr>-->
+
+                <!--</table>-->
+            </div>
+            <div class="modal-footer">
+                <button type="button"  class="btn btn-primary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container ">
     <div class="single">
         <div class="blog-to">
             <div class="blog-top">
-                <div class="blog-left text-center ">
-                    <b>[[${note.getTitle()}]]</b><p class="mt-10">Noted by <a >[[${note.getAuthor()}]]</a></p>
+                <div class="blog-left text-center " >
+                    <b style="color:deepskyblue">[[${note.getTitle()}]]</b><p class="mt-10">Noted by <a >[[${note.getAuthor()}]]</a></p>
                     <p>分类标签:[[${note.getNoteclassify().getClassifyname()}]]</p>
+                    <input id="noteId" type="hidden" th:value="${note.getId()}"\>
 
+                </div>
+                <div style="float: right; border:1px dashed rgba(125,125,125,0.75);padding:10px;">
+                    <p style="color:red">相关资源数:[[${#arrays.length(fileList)}]]</p>
+                    <p>
+                        <button type="button" data-toggle="modal" data-target="#fileModal" onclick="getFile()" class="btn btn-primary" style="margin-right: 5px;">
+                            <i class="glyphicon glyphicon-search"></i>点此查看
+                        </button>
+                        <!--<button type="button" class="btn btn-success">-->
+                            <!--<i class="glyphicon glyphicon-eye-open"></i>在线预览-->
+                        <!--</button>-->
+
+                    </p>
                 </div>
 
                 <div class=" text-center ">
@@ -62,8 +127,92 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </div>
                     <div class="clearfix"> </div>
                 </div>
+                <hr>
 
-                <div class="clearfix"> </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>评论区</h3>
+
+                    </div>
+
+                    <div class="panel-body" id="commentBody">
+                        <!--回复区域 begin-->
+                        <div class="comment-show" th:each="item:${commentList}">
+                            <div class="comment-show-con clearfix">
+                                <div class="comment-show-con-img pull-left">                            <img style="width: 100%;height: 100%;" th:src="@{/pageResources/images/user.jpg}" alt="..." ></div>
+                                <div class="comment-show-con-list pull-left clearfix">
+                                    <div class="pl-text clearfix">
+                                        <a href="#" class="comment-size-name">[[${item.user.username}]] </a>
+                                        <span class="my-pl-con" th:utext="${item.comment.content}"></span>
+                                    </div>
+                                    <div class="date-dz">
+                                        <span class="date-dz-left pull-left comment-time" >[[${item.comment.date}]]</span>
+
+                                        <div class="date-dz-right pull-right comment-pl-block">
+                                            <a shiro:hasRole="admin" href="javascript:deleteComment(this);" th:id="${item.comment.id}" class="removeBlock">删除</a>
+                                            <a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a>
+                                            <span class="pull-left date-dz-line">|</span>
+                                            <a href="javascript:toastr.warning('还没写呢，快催催我');" class="date-dz-z pull-left"><i class="date-dz-z-click-red"></i>赞 (<i class="z-num">[[${item.comment.agree}]]</i>)</a>
+                                            <span class="pull-left date-dz-line">|</span>
+                                            <span class="date-dz-z pull-left hfNumber " th:utext="${item.replyCount==0}?'暂无回复':'<a class=\'getReply\'>查看回复，共<font style=\'color:blue\'>'+${item.replyCount}+'</font>条</a>'"></span>
+                                        </div>
+                                        <!--${item.replyCount==0}?'暂无回复':-->
+                                    </div>
+                                    <input type="hidden" th:value="${item.comment.id}" class="commentId"/>
+                                    <div class="hf-list-con" >
+
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--回复区域 end-->
+                    </div>
+                    <div class="panel-footer">
+                        <div class="">
+                            <div class="row">
+                                <div class="col-md-2 userBox col-sm-2" >
+                                    <div class="row center-block" style="margin-top: 10px;">
+                                        <img style="width: 100%;height: 100%;" th:src="@{/pageResources/images/user.jpg}" alt="..." class="img-circle">
+                                    </div>
+                                    <hr class="hr-grey">
+                                    <div class="row" shiro:authenticated="">
+                                        <table>
+                                            <tr>
+                                                <td th:text="${session.currentUser.username}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>这里放一些简介？</td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+                                    <div class="row" shiro:notAuthenticated="" style="color:red">尚未登陆</div>
+                                    <hr class="hr-grey">
+                                    <div class="row">
+                                        这里放一些小按钮
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-10 col-sm-10">
+                                    <div id="editor">
+
+                                    </div>
+                                    <div class="row " >
+                                        <div class="col-md-offset-10 col-sm-offset-10 mt-10">
+                                            <a shiro:notAuthenticated=""  class="btn btn-danger" th:href="@{/user/loginEntrance}" >请先登陆！</a>
+                                            <button shiro:authenticated="" type="button" class="btn btn-success" onclick="commentEntrance()" >提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -79,7 +228,146 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script th:src="@{/pageResources/mark/flowchart.min.js}"></script>
 <script th:src="@{/pageResources/mark/jquery.flowchart.min.js}"></script>
 <script th:src="@{/pageResources/js/editormd.js}"></script>
+<script th:src="@{/pageResources/js/wangEditor.js}"></script>
+<script th:src="@{/pageResources/js/jquery.flexText.js}"></script>
+<script th:src="@{/pageResources/toastr/toastr.js}"></script>
+<script th:src="@{/pageResources/js/confirmBox.js}"></script>
 <script type="text/javascript">
+    toastr.options.positionClass = 'toast-bottom-center';
+    var mark = 1;
+    /**
+     * 单击评论回复按钮的创建回复框
+     */
+    $('.comment-show').on('click','.pl-hf',function(){
+
+        //获取回复人的名字
+        var fhName = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+        //回复@
+        var fhN = '回复@'+fhName+':';
+        //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+        var fhHtml = '<div class="hf-con pull-left"> <textarea class="content comment-input hf-input" placeholder="" onkeyup="keyUP(this)"></textarea><span style="color:red;margin-top: 5px;">限制140个汉字</span> ';
+        fhHtml+=[[${session.currentUser==null}]]?'<a  class="btn btn-danger " style="float:right;margin-top:20px;margin-right: 2px;" href="/user/loginEntrance" >请先登陆！</a>':'<a  href="javascript:;" class="hf-pl saveReply">评论</a>' ;
+        fhHtml+='</div>';
+        //显示回复
+        if($(this).is('.hf-con-block')){
+            if(mark==1){
+                //如果回复框没有生成的时候，回复list没有被显示，那么就需要单击
+                $(this).siblings(".hfNumber").children(" a").click();
+            }
+            $(this).parents('.date-dz-right').parents('.date-dz').append(fhHtml);
+            $(this).removeClass('hf-con-block');
+            $('.content').flexText();
+            $(this).parents('.date-dz-right').siblings('.hf-con').find('.pre').css('padding','6px 15px');
+            //console.log($(this).parents('.date-dz-right').siblings('.hf-con').find('.pre'))
+            //input框自动聚焦
+            $(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val(fhN);
+        }else {
+            if(mark==0){
+                //如果回复框生成的时候，回复list被显示，那么就需要单击
+                $(this).siblings(".hfNumber").children(" a").click();
+            }
+            $(this).addClass('hf-con-block');
+            $(this).parents('.date-dz-right').siblings('.hf-con').remove();
+        }
+    });
+    /**
+     * 删除评论
+     */
+    $('.comment-show').on('click','.removeBlock',function(){
+        var that = this;
+        Ewin.confirm({ message: "确认要删除选择的评论吗？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
+            var id = $(that).attr("id");
+            //toastr.success(id);
+            $.ajax({
+                url:'/comment/deleteComment',
+                data:{"commentId":id},
+                success:function (data) {
+                    if(data["code"]=="200"){
+                        toastr.success("删除成功！");
+                        $(this).parents(".comment-show").remove();
+                    }else{
+                        toastr.error(data["message"]);
+                    }
+                },
+                error:function () {
+                    toastr.error("网络错误，请稍后重试。");
+                }
+            })
+            $(that).parents(".comment-show").remove();
+        });
+
+        // var oT = $(this).parents('.date-dz-right').parents('.date-dz').parents('.all-pl-con');
+        // if(oT.siblings('.all-pl-con').length >= 1){
+        //     oT.remove();
+        // }else {
+        //     $(this).parents('.date-dz-right').parents('.date-dz').parents('.all-pl-con').parents('.hf-list-con').css('display','none')
+        //     oT.remove();
+        // }
+        // $(this).parents('.date-dz-right').parents('.date-dz').parents('.comment-show-con-list').parents('.comment-show-con').remove();
+
+    })
+    //查看回复
+    /**
+     * 显示隐藏方式太low了吧= =
+     * @type {number}
+     */
+
+    $(".comment-show").on('click','.getReply',function(){
+        var length = $(this).parents(".date-dz").siblings(".hf-list-con").children().length;
+        var commentId = $(this).parents(".date-dz").siblings(".commentId").val();
+        var obj = $(this);
+        if(mark==0){
+            $(this).parents(".date-dz").siblings(".hf-list-con").css("display","none");
+            mark=1;
+        }else{
+            $(this).parents(".date-dz").siblings(".hf-list-con").css("display","block");
+            mark=0;
+        }
+        //alert(length);
+        if(length<1){
+            //说明没有数据，那就去查
+            $.ajax({
+                url:'/comment/getReplyListByCommentId',
+                data:{"commentId":commentId},
+                async:false,
+                success:function (data) {
+                    if(data["code"]=="200"){
+                        //成功以后拿object
+                        var replyList = data["object"];
+                        $(replyList).each(function (index,item) {
+                            var s = "<div class=\"all-pl-con\">\n" +
+                                "                                        <div class=\"pl-text hfpl-text clearfix\">\n" +
+                                "                                            <a href=\"#\" class=\"comment-size-name\">"+item.user.username+" </a>\n" +
+                                "                                            <span class=\"my-pl-con\">"+item.reply.content+"</span>\n" +
+                                "                                        </div>\n" +
+                                "                                            <div class=\"date-dz\">\n" +
+                                "                                        <span class=\"date-dz-left pull-left comment-time\">"+item.reply.date+"</span>\n" +
+                                "                                        <div class=\"date-dz-right pull-right comment-pl-block\">\n" +
+                                "                                            <a href=\"javascript:toastr.warning(\'还没写呢，快催催我\');\" class=\"removeBlock\">删除</a>\n" +
+                                "                                        </div>\n" +
+                                "                                        </div>\n" +
+                                "                                        </div>"
+                            obj.parents(".date-dz").siblings(".hf-list-con").append(s);
+
+                            //alert(s);
+                        })
+                    }else{
+                        toastr.error(data["message"]);
+                    }
+                },
+                error:function () {
+                    toastr.error("查询失败，网络错误");
+                }
+            })
+        }
+
+    })
+</script>
+<script th:inline="javascript">
+    var editor = null;
     $(function() {
         var testEditormdView
         testEditormdView = editormd.markdownToHTML("test-editormd-view", {
@@ -90,7 +378,246 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             flowChart       : true,  // 默认不解析
             sequenceDiagram : true,  // 默认不解析
         });
+        var E = window.wangEditor;
+        editor = new E('#editor');
+        // 或者 var editor = new E( document.getElementById('editor') )
+        //配置菜单栏，不支持换行
+
+        editor.customConfig.menus=[
+            'bold','fontSize','fontName','italic','underline','foreColor','link','justify','image','code'
+        ]
+        editor.create();
     });
+    var isNotLogin = [[${session.currentUser==null}]];
+    /**
+     *评论前检查是否登陆
+     */
+    function commentEntrance() {
+        //作登陆检查
+
+        if(isNotLogin){
+            toastr.error("还未登陆，无法评论");
+        }else{
+            //检查输入
+            var textContent = editor.txt.text();
+            if(textContent==""||textContent.length<1||textContent==null){
+                toastr.error("请输入评论");
+            }else{
+                saveComment();
+            }
+        }
+    }
+    /**
+     * 提交评论，需要以下几个参数传入后台
+     * 1、userId 提交者id 用户点击提交后可以直接从session里面拿不用传
+     * 2、content 评论内容
+     * 3、noteId 笔记Id
+     * 4、date和del_flag默认
+     */
+    function saveComment(){
+        var content = editor.txt.html();//带样式
+        var textContent = editor.txt.text();//不带样式
+        var noteId = $("#noteId").val();
+       // toastr.success(content+"，笔记Id:"+noteId);
+        $.ajax({
+            url:'/comment/saveComment',
+            async:false,
+            data:{"content":content,"textContent":textContent,"noteId":noteId},
+            success:function (data) {
+                //成功后要进行追加
+                //……
+                if(data["code"]=="200"){
+                    //追加
+                    var html = "<div class=\"comment-show\">\n" +
+                        "                            <div class=\"comment-show-con clearfix\">\n" +
+                        "                                <div class=\"comment-show-con-img pull-left\">                            <img style=\"width: 100%;height: 100%;\" src=\"/pageResources/images/user.jpg\" alt=\"...\" ></div>\n" +
+                        "                                <div class=\"comment-show-con-list pull-left clearfix\">\n" +
+                        "                                    <div class=\"pl-text clearfix\">\n" +
+                        "                                        <a href=\"#\" class=\"comment-size-name\">"+data["object"].username+" </a>\n" +
+                        "                                        <span class=\"my-pl-con\">"+content+"</span>\n" +
+                        "                                    </div>\n" +
+                        "                                    <div class=\"date-dz\">\n" +
+                        "                                        <span class=\"date-dz-left pull-left comment-time\">"+getDate()+"</span>\n" +
+                        "                                        <div class=\"date-dz-right pull-right comment-pl-block\">\n" +
+                        "                                            <a href=\"javascript:;\" class=\"removeBlock\">删除</a>\n" +
+                        "                                            <a href=\"javascript:;\" class=\"date-dz-pl pl-hf hf-con-block pull-left\">回复</a><span class=\"pull-left date-dz-line\">|</span>\n" +
+                        "                                            <a href=\"javascript:;\" class=\"date-dz-z pull-left\"><i class=\"date-dz-z-click-red\"></i>赞 (<i class=\"z-num\">0</i>)</a>\n" +
+                        "                                            <span class=\"pull-left date-dz-line\">|</span><span class=\"date-dz-z pull-left hfNumber \" >暂无回复</span>\n" +
+                        "                                        </div>\n" +
+                        "                                    </div>\n" +
+                        "                                    <div class=\"hf-list-con\"></div>\n" +
+                        "                                </div>\n" +
+                        "                            </div>\n" +
+                        "                        </div>";
+
+                    $("#commentBody").append(html);
+                    toastr.success("评论成功");
+                }else{
+                    toastr.error(data["message"]);
+                }
+            },
+            error:function () {
+                toastr.error("网络错误，评论失败，请稍后重试")
+            }
+        })
+
+    }
+
+    /**
+     *回复前检查是否登陆
+     */
+    function ReplyEntrance(content,commentId,replyTo,sequence,obj) {
+        //作登陆检查
+
+        if(isNotLogin){
+            toastr.error("还未登陆，无法回复");
+        }else{
+            //检查输入
+            var textContent = content;
+            if(textContent==""||textContent.length<1||textContent==null){
+                toastr.error("请输入回复");
+            }else{
+                if(content.indexOf(":")==-1){
+                    content = replyTo+content;
+                }
+                $.ajax({
+                    url:'/comment/saveReply',
+                    data:{"content":content,"commentId":commentId,"replyTo":replyTo,"sequence":sequence},
+                    success:function (data) {
+                        if(data["code"]=="200"){
+                            var s = "<div class=\"all-pl-con\">\n" +
+                                "                                        <div class=\"pl-text hfpl-text clearfix\">\n" +
+                                "                                            <a href=\"#\" class=\"comment-size-name\">"+data["object"].username+" </a>\n" +
+                                "                                            <span class=\"my-pl-con\">"+content+"</span>\n" +
+                                "                                        </div>\n" +
+                                "                                            <div class=\"date-dz\">\n" +
+                                "                                        <span class=\"date-dz-left pull-left comment-time\">"+getDate()+"</span>\n" +
+                                "                                        <div class=\"date-dz-right pull-right comment-pl-block\">\n" +
+                                "                                            <a href=\"javascript:;\" class=\"removeBlock\">删除</a>\n" +
+                                "                                        </div>\n" +
+                                "                                        </div>\n" +
+                                "                                        </div>";
+                            //打开回复列表
+                            if(mark==0){
+                                $(obj).parents(".date-dz").siblings(".hf-list-con").css("display","none");
+                                mark=1;
+                            }else{
+                                $(obj).parents(".date-dz").siblings(".hf-list-con").css("display","block");
+                                mark=0;
+                            }
+                            //追加回复
+                            $(obj).parents(".date-dz").siblings(".hf-list-con").append(s);
+                            //改变回复数字
+
+                            var isNone = $(obj).parents(".hf-con").siblings(".date-dz-right").children(".hfNumber").children().length==0;
+                            var str="";
+                            if(isNone){
+                                //之前是没有回复的就变成1
+                                 str = "<a class='getReply'>查看回复，共<font style='color:blue'>1</font>条</a>";
+                                $(obj).parents(".hf-con").siblings(".date-dz-right").children(".hfNumber").html(str);
+                                //
+                            }else{
+                                //之前有回复就+1
+                                var num = $(obj).parents(".hf-con").siblings(".date-dz-right").children(".hfNumber").find(" font").html();
+                                num++;
+                                $(obj).parents(".hf-con").siblings(".date-dz-right").children(".hfNumber").find(" font").html(num);
+                            }
+                            //移除回复框
+                            $(obj).parents(".hf-con").remove();
+                            toastr.success("回复成功！");
+                        }else{
+                            toastr.error(data["message"]);
+                        }
+                    },error:function () {
+                        toastr.error("评论失败，网络错误");
+                    }
+                })
+            }
+        }
+    }
+    /**
+     * 提交回复，需要输入以下几个参数
+     * 1、commentId 评论Id
+     */
+    $(".comment-show").on("click",".saveReply",function () {
+        var commentId = $(this).parents(".date-dz").siblings(".commentId").val();
+        var content = $(this).parent().find(".content").val();
+        var replyTo = "回复@"+($(this).parents(".date-dz").siblings(".pl-text").find('.comment-size-name').html())+":";
+        var sequence =$(this).parents(".date-dz").siblings(".hf-list-con").children().length+1;
+
+        //toastr.success(sequence);
+        ReplyEntrance(content,commentId,replyTo,sequence,this)
+        //toastr.success(commentId);
+
+    })
+
+
+    /**
+     * 回复限制字数
+     * @param t
+     */
+    function keyUP(t){
+        var len = $(t).val().length;
+        if(len > 139){
+            $(t).val($(t).val().substring(0,140));
+        }
+    }
+
+    function getDate(){
+        var myDate = new Date();
+        //获取当前年
+        var year=myDate.getFullYear();
+        //获取当前月
+        var month=myDate.getMonth()+1;
+        //获取当前日
+        var date=myDate.getDate();
+        var h=myDate.getHours();       //获取当前小时数(0-23)
+        var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+        if(m<10) m = '0' + m;
+        var s=myDate.getSeconds();
+        if(s<10) s = '0' + s;
+        var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
+        return now;
+    }
+
+    function getFile() {
+        var fileList = [[${fileList}]];
+        var s = "<table class=\"table table-hover table-striped table-condensed\">\n" +
+            "                <thead>\n" +
+            "                <th>序号</th>\n" +
+            "                <th>文件名</th>\n" +
+            "                <th>类型</th>\n" +
+            "                <th>操作</th>\n" +
+            "                </thead>";
+        if(null!=fileList){
+            $(fileList).each(function (index,item) {
+                 s += "<tr style='font-weight: bolder'>\n" +
+                    "  <td>"+(index+1)+"\n" +
+                    "  </td><td>"+item.resourceName+"</td><td>"+item.resourceType+"</td>\n" +
+                    "   <td><a href='"+item.vitrualPath+"' download='"+item.resourceName+"' class=\"btn btn-primary\" style=\"margin-right: 5px;\">\n" +
+                    "                            <i class=\"glyphicon glyphicon-arrow-down\"></i>点此下载\n" +
+                    "                        </a>\n" ;
+
+                 if(item.resourceType==".pdf"){
+                     s+="<a href='"+item.vitrualPath+"'  class=\"btn btn-success\">\n" +
+                     "                            <i class=\"glyphicon glyphicon-arrow-down\"></i>在线预览\n" +
+                     "                        </a>"
+                 }else{
+                     s+="<button onclick='toastr.warning(\"还没写呢快催催我！\")' type=\"button\" class=\"btn btn-success\">\n" +
+                         "                            <i class=\"glyphicon glyphicon-arrow-down\"></i>在线预览\n" +
+                         "                        </button>"
+                 }
+
+                 s+="  </td> </tr>"
+
+            })
+        }else if(fileList.length==0){
+            s+="<tr  ><td colspan=\"4\" style=\"color: red\" >暂无相关资源哦</td></tr>"
+        }
+        s+="</table>"
+        $("#resourceBody").html(s);
+    }
+
 </script>
 </body>
 </html>

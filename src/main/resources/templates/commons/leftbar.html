@@ -32,11 +32,11 @@
                         class="lnr lnr-home"></i> <span>技能管理</span></a></li>
                 <li><a th:href="@{/note/entrance}" th:class="${activeUrl=='note'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>笔记管理</span></a></li>
-                <li><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='diray'?'active':''}"><i
+                <li shiro:hasRole="superAdmin"><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='diray'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>随笔管理</span></a></li>
-                <li><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='photo'?'active':''}"><i
+                <li shiro:hasRole="superAdmin"><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='photo'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>图片管理</span></a></li>
-                <li><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='action'?'active':''}"><i
+                <li shiro:hasRole="superAdmin"><a th:href="@{/backPages/center.html}" th:class="${activeUrl=='action'?'active':''}"><i
                         class="lnr lnr-home"></i> <span>日迹管理</span></a></li>
 
                 <li shiro:hasRole="superAdmin">

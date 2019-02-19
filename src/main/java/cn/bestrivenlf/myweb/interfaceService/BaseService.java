@@ -1,5 +1,6 @@
 package cn.bestrivenlf.myweb.interfaceService;
 
+import cn.bestrivenlf.myweb.entity.User;
 import net.sf.json.JSONObject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,4 +21,6 @@ public interface BaseService {
     public JSONObject getAjaxResult(Boolean mark,int errorCode,String errorMessage);
     public JSONObject getAjaxResultHasObject(Boolean mark,int errorCode,String errorMessage,Object object);
     public Object getAllUrlMapping();
+    public User getCurrentUser();
+    public String getUuid();
 }

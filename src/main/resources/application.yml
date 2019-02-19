@@ -3,11 +3,14 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapping/*.xml
 
-
 file:
-#  uploadPath: E:\\images\\
+#  uploadPath: F:\\images\\
   uploadPath: /www/wwwroot/myblog/images/markImages/
+  noteResourceUploadPath: /www/wwwroot/myblog/resources/noteResources/
+  #noteResourceUploadPath: F:\\images\\
   accessPath: /upload/markPic/
+
+  noteAccessPath: /upload/noteResources/
   musicPath: /www/wwwroot/myblog/media/music/
   musicAccessPath: /media/music/
 
@@ -26,8 +29,8 @@ spring:
 
   mail:
     username: 214704958@qq.com
-    password: shzhyytuphnbbjea
-    host: smtp.qq.com
+    password: 
+    host: 
     properties:
       mail:
         smtp:
@@ -35,8 +38,8 @@ spring:
             enable: true
   rabbitmq:
     host: 120.78.209.159
-    username: guest
-    password: guest
+    username: 
+    password: 
   redis:
     host: 120.78.209.159
   messages:
@@ -51,8 +54,8 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-    username: myWebsite
-    password: 60085040
+    username: 
+    password: 
     url: jdbc:mysql://120.78.209.159:3306/myWebsite?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     #url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&amp;characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver #指定驱动
@@ -82,4 +85,5 @@ spring:
 
 
 
-
+server:
+  port: 8082

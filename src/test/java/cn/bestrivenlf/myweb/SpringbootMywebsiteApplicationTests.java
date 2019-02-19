@@ -81,7 +81,7 @@ public class SpringbootMywebsiteApplicationTests {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("message from god！");
         message.setText("shagou,我又发布新版本了，欢迎访问www.bestrivenlf.cn进行最新体验，新出了留言娱乐功能，快来给我留言吧~~~~~~~~~");
-        message.setTo("88665291@qq.com");
+        message.setTo("88665291@qq.com","2698298975@qq.com");
         message.setFrom("214704958@qq.com");
         mailSender.send(message);
         System.out.println("succ");

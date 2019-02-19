@@ -176,7 +176,6 @@ public class UserServiceImpl implements UserService {
         }
         return jsonArray;
     }
-
     /**
      * 保存role的方法
      * 注意这是通用方法
@@ -196,47 +195,53 @@ public class UserServiceImpl implements UserService {
 
         String mark1 = "";
         String mark2 = "";
-        if(role.getId().length()<32){
+        if (role.getId().length() < 32) {
             //是新建的角色，插入数据没得跑了
             //先创建角色
             //?问题1：如果新建的角色和已有角色重名呢？应该怎么办？
             //这里先判断是否重名？
             int i = userDao.checkRole(role.getRole());
-            if(i>0){
+            if (i > 0) {
                 return "已存在该角色名";
             }
             Role temp = new Role();
             role.setId(temp.getId());
             mark1 = userDao.saveRole(role);
-            for(String permission:permissionList){
-                //循环插入
-                mark2=userDao.insertPermissionToRole(role.getId(),permission);
-                if(!mark2.equals("succ")){
-                    break;
+            if(null!=permissionList){
+                for (String permission : permissionList) {
+                    //循环插入
+                    mark2 = userDao.insertPermissionToRole(role.getId(), permission);
+                    if (!mark2.equals("succ")) {
+                        break;
+                    }
                 }
             }
-            if(mark1.equals(mark2)){
-                return mark1.equals("succ")?mark1:"error";
-            }else{
+            if (mark1.equals(mark2)) {
+                return mark1.equals("succ") ? mark1 : "error";
+            } else {
                 return "error";
             }
 
-        }else{
+        } else {
             //是旧角色修改没得跑了
             //那么到底是修改还是删除？
-            if(role.getDel_flag()==0){
+            if (role.getDel_flag() == 0) {
                 //修改
                 Role targetRole = userDao.getRoleById(role.getId());
-                if(targetRole!=null){
+                if (targetRole != null) {
                     List<Permission> permissions = userDao.getPerMissionByRoleId(role.getId());
                     List<String> deleteList = new ArrayList<>();
                     List<String> insertList = new ArrayList<>();
-                    for(Permission p:permissions){
+                    for (Permission p : permissions) {
                         String pname = p.getId();
                         //首先要找出添加的权限，然后找出被删除的权限
-                        if(Arrays.asList(permissionList).contains(pname)){
+                        if(null == permissionList){
+                            //如果permissionList是空，比如删除全部的权限后传来的就是null
+                            deleteList.add(p.getId());
+                        }else if (Arrays.asList(permissionList).contains(pname)) {
+
                             //包含了，那就怎么办呢？说明原数据已经有了，不是我们要修改的目标数据，那就跳过呗
-                        }else{
+                        } else {
                             //说明不包含了，那就是要删除的数据  permissionList没有permissions里面的数据
                             deleteList.add(p.getId());
                         }
@@ -244,38 +249,40 @@ public class UserServiceImpl implements UserService {
                     }
 
                     //那添加的权限怎么找？就是permissionList而permissions没有的，那我们就来遍历permissionList
-                    for(String p:permissionList){
-                        boolean mark = true;
-                        for(Permission permission:permissions){
-                            if(permission.getId().equals(p)){
-                                mark = false;
+                    if(null!=permissionList){
+                        for (String p : permissionList) {
+                            boolean mark = true;
+                            for (Permission permission : permissions) {
+                                if (permission.getId().equals(p)) {
+                                    mark = false;
+                                }
                             }
-                        }
-                        if(mark){
-                            //没有发现permissions中存在的却在permissionList中存在，则要添加
-                            insertList.add(p);
+                            if (mark) {
+                                //没有发现permissions中存在的却在permissionList中存在，则要添加
+                                insertList.add(p);
+                            }
                         }
                     }
                     //现在删除，添加的都得到了，那就开始操作
                     //删除操作
-                    for(String pid:deleteList){
-                        userDao.deleteRolePermission(role.getId(),pid);
-                        mark2="succ";
+                    for (String pid : deleteList) {
+                        userDao.deleteRolePermission(role.getId(), pid);
+                        mark2 = "succ";
                     }
                     //添加操作
-                    for(String pid:insertList){
-                        mark2 = userDao.insertPermissionToRole(role.getId(),pid);
-                        if(!mark2.equals("succ")){
+                    for (String pid : insertList) {
+                        mark2 = userDao.insertPermissionToRole(role.getId(), pid);
+                        if (!mark2.equals("succ")) {
                             break;
                         }
                     }
                     return mark2;
 
-                }else{
+                } else {
                     //code编码设置
                     return "没有找到被修改的源数据";
                 }
-            }else {
+            } else {
                 //删除
                 role.setDel_flag(1);
                 mark1 = userDao.saveRole(role);

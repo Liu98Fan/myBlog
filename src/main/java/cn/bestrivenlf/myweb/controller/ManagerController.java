@@ -357,4 +357,12 @@ public class ManagerController {
         return baseService.getAjaxResultHasObject(true,-1,"-1",idList);
     }
 
+    @ResponseBody
+    @RequestMapping("/deletePermissionBySelect")
+    public Object deletePermissionBySelect(@RequestParam(value = "objectJson")String objectJson){
+        System.out.println(objectJson);
+        // 这里拿到需要删除的对象集合的JSON字符串，接下来1、转list 2、调用delete方法（删除单个）
+        return null;
+    }
+
 }

@@ -4,29 +4,30 @@
  * @Date：2018-4-18
  */
 //分页相关参数
-var limit = 8;//每页显示条数
-var Number = 0;
-var start = 0;//起始页
-var nowPage = 1;//当前页
-function getInformation(){
+var limitByClassify = 8;//每页显示条数
+var NumberByClassify = 0;
+var startByClassify = 0;//起始页
+var nowPageByClassify = 1;//当前页
+var classify = null;
+function getInformationByClassify(classifyId){
+    classify = classifyId;
 //AJAX向后台请求数据
     $.ajax({
         type:'get',
-        url:"/note/getNotePage",
+        url:"/note/getNotePageByClassifyId",
         sync:false,
-        data:{start:start,limit:limit,nowPage:nowPage,Number:Number},
+        data:{start:startByClassify,limit:limitByClassify,nowPage:nowPageByClassify,Number:NumberByClassify,"classifyId":classify},
         success:function(data){
-            setHtml(data.root)
-            start = data.currentResult;
-            Number = data.total;
+            setHtmlByClassify(data.root)
+            startByClassify = data.currentResult;
+            NumberByClassify = data.total;
             //进行分页初始化
-            pageReady();
+            pageReadyByClassify(startByClassify,limitByClassify,nowPageByClassify,NumberByClassify);
         }
 
     });
 }
-
-function setHtml(data){
+function setHtmlByClassify(data){
     var s = "";
     $(data).each(function(index,object){
 
@@ -58,32 +59,27 @@ function setHtml(data){
     }
 }
 
-function pageReady(){
+function pageReadyByClassify(){
 //layui分页开启
     layui.use('laypage',function(){
         var laypage = layui.laypage;
         laypage.render({
             elem:'changePage'
-            ,count:Number//后台传入
-            ,limit:limit
-            ,curr:nowPage
+            ,count:NumberByClassify//后台传入
+            ,limit:limitByClassify
+            ,curr:nowPageByClassify
             ,jump:function(obj, first){
                 //obj包含了当前分页的所有参数，比如：
                 // console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
                 // console.log(obj.limit); //得到每页显示的条数
-                nowPage = obj.curr;
-                start = (obj.curr-1)*obj.limit;
+                nowPageByClassify = obj.curr;
+                startByClassify = (obj.curr-1)*obj.limit;
                 //首次不执行
                 if(!first){
-                    getInformation();
+                    getInformationByClassify(classify);
                 }
 
             }
         });
     })
 }
-
-$(document).ready(function(){
-    //ajax先拿到后台数据
-    getInformation();
-});

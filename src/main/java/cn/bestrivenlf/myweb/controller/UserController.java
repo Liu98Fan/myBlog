@@ -85,7 +85,13 @@ public class UserController {
     }
     @RequestMapping("/loginEntrance")
     public String loginEntrance(){
-        return "login";
+        User user = baseService.getCurrentUser();
+        if(null==user){
+            return "login";
+        }else{
+            return "redirect:/main/entrance";
+        }
+
     }
 
     /**

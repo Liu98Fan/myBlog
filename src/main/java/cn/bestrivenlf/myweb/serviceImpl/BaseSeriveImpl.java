@@ -1,10 +1,13 @@
 package cn.bestrivenlf.myweb.serviceImpl;
 
+import cn.bestrivenlf.myweb.entity.User;
 import cn.bestrivenlf.myweb.interfaceService.BaseService;
 import cn.bestrivenlf.myweb.interfaceService.NoteService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +27,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import sun.misc.Request;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -189,5 +189,18 @@ public class BaseSeriveImpl implements BaseService {
         }
         JSONArray jsonArray = JSONArray.fromObject(list);
         return jsonArray;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Subject subject = SecurityUtils.getSubject();
+        User user =(User) subject.getPrincipal();
+        return user;
+    }
+
+    @Override
+    public String getUuid() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-", "");
     }
 }

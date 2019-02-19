@@ -63,7 +63,7 @@ function pageReady(){
 //layui分页开启
     if($("#cselect").val()!="-1"){
         $("#classifyName").attr("type","hidden");
-        $("#classifyName").val(object.find("option:selected").text());
+        $("#classifyName").val($("#cselect").find("option:selected").text());
         $("#classifyName").removeAttr("required");
     }
 

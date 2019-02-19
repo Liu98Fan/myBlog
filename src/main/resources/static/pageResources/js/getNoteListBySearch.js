@@ -4,29 +4,36 @@
  * @Date：2018-4-18
  */
 //分页相关参数
-var limit = 8;//每页显示条数
-var Number = 0;
-var start = 0;//起始页
-var nowPage = 1;//当前页
-function getInformation(){
+var limitBySearch = 8;//每页显示条数
+var NumberBySearch = 0;
+var startBySearch = 0;//起始页
+var nowPageBySearch = 1;//当前页
+var searchV = null;
+function getInformationBySearch(search){
+    searchV = search
 //AJAX向后台请求数据
     $.ajax({
         type:'get',
-        url:"/note/getNotePage",
+        url:"/note/getNotePageBySearch",
         sync:false,
-        data:{start:start,limit:limit,nowPage:nowPage,Number:Number},
+        data:{start:startBySearch,limit:limitBySearch,nowPage:nowPageBySearch,Number:NumberBySearch,"search":searchV},
         success:function(data){
-            setHtml(data.root)
-            start = data.currentResult;
-            Number = data.total;
-            //进行分页初始化
-            pageReady();
-        }
+            if(data.root.length>0){
+                setHtml(data.root)
+                startBySearch = data.currentResult;
+                NumberBySearch = data.total;
+                //进行分页初始化
+                pageReadyBySearch(startBySearch,limitBySearch,nowPageBySearch,NumberBySearch);
+            }else{
+                toastr.success("并没有查询到相关笔记，请换一个关键词吧~")
+            }
 
+
+        }
     });
 }
 
-function setHtml(data){
+function setHtmlBySearch(data){
     var s = "";
     $(data).each(function(index,object){
 
@@ -58,32 +65,27 @@ function setHtml(data){
     }
 }
 
-function pageReady(){
+function pageReadyBySearch(){
 //layui分页开启
     layui.use('laypage',function(){
         var laypage = layui.laypage;
         laypage.render({
             elem:'changePage'
-            ,count:Number//后台传入
-            ,limit:limit
-            ,curr:nowPage
+            ,count:NumberBySearch//后台传入
+            ,limit:limitBySearch
+            ,curr:nowPageBySearch
             ,jump:function(obj, first){
                 //obj包含了当前分页的所有参数，比如：
                 // console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
                 // console.log(obj.limit); //得到每页显示的条数
-                nowPage = obj.curr;
-                start = (obj.curr-1)*obj.limit;
+                nowPageBySearch = obj.curr;
+                startBySearch = (obj.curr-1)*obj.limit;
                 //首次不执行
                 if(!first){
-                    getInformation();
+                    getInformationBySearch(searchV);
                 }
 
             }
         });
     })
 }
-
-$(document).ready(function(){
-    //ajax先拿到后台数据
-    getInformation();
-});

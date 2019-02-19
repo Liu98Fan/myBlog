@@ -7,27 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <!-- VENDOR CSS -->
     <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/bootstrap/css/bootstrap.min.css}" >
-    <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/font-awesome/css/font-awesome.min.css}" >
     <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/linearicons/style.css}" >
     <link rel="stylesheet" th:href="@{/pageResources/assets/vendor/toastr/toastr.min.css}" >
-    <link rel="stylesheet" th:href="@{/pageResources/css/bootstrap-table.css}" >
-
+    <link rel="stylesheet" th:href="@{/pageResources/css/bootstrap-table.css}">
     <!-- MAIN CSS -->
-    <link rel="stylesheet" th:href="@{/pageResources/assets/css/main.css}" >
-    <link rel="stylesheet" th:href="@{/pageResources/layui/css/layui.css}"  media="all">
-    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
-    <link rel="stylesheet" th:href="@{/pageResources/assets/css/demo.css}">
+    <link rel="stylesheet" th:href="@{/pageResources/assets/css/main.css}">
 
-    <!-- GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
-    <!-- ICONS -->
-    <link rel="apple-touch-icon" sizes="76x76"th:href="@{/pageResources/assets/img/apple-icon.png}" >
-    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/pageResources/assets/img/favicon.png}" >
-    <style>
-        #xianshi button{
-            margin-right:10px !important;
-        }
-    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -48,7 +33,7 @@
                     <button id="btn_add_role" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加权限
                     </button>
-                    <button id="btn_delete_role" type="button" class="btn btn-default" onclick="deleteRole()">
+                    <button id="btn_delete_role" type="button" class="btn btn-default" onclick="deleteAuthority()">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除权限
                     </button>
                 </div>
@@ -102,11 +87,12 @@
 <script th:src="@{/pageResources/js/bootstrap-table-zh-CN.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js}" ></script>
 <script th:src="@{/pageResources/assets/vendor/toastr/toastr.min.js}" ></script>
-<script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>
-<script th:src="@{/pageResources/layui/layui.js}" charset="utf-8"></script>
+<!--<script th:src="@{/pageResources/assets/scripts/klorofil-common.js}"></script>-->
+
+<!--<script th:src="@{/pageResources/layui/layui.js}" charset="utf-8"></script>-->
 <script th:src="@{/pageResources/toastr/toastr.js}"></script>
 <!--<script th:src="@{/pageResources/js/userManagerSplitPage.js}"></script>-->
-<script th:src="@{/pageResources/js/confirmBox.js}"></script>
+<!--<script th:src="@{/pageResources/js/confirmBox.js}"></script>-->
 <script>
     toastr.options.positionClass = 'toast-bottom-center';
     $(function init() {
@@ -152,8 +138,6 @@
                 cardView: false,                    //是否显示详细视图
                 detailView: true,                   //是否显示父子表
                 columns: [{
-                    checkbox: true
-                }, {
                     field: 'parent',
                     title: '父路径'
                 }, {
@@ -203,7 +187,7 @@
         oTableInit.InitSubTable = function(index, row, $detail){
             var parentid = row.id;
             var parent = row.parent;
-            var cur_table = $detail.html('<table></table>').find('table');
+            var cur_table = $detail.html('<table id="son_table_authority"></table>').find('table');
             $(cur_table).bootstrapTable({
                 url: '/manager/getSonAuthorityForTable',
                 method: 'get',
@@ -459,6 +443,38 @@
             return false;
         }
     }
+
+    /**
+     * 获取表格选中行
+     */
+    function getCheckData(){
+        var data = $("#son_table_authority").bootstrapTable("getSelections");
+        console.log(data);
+        return data;
+    }
+
+    /**
+     * 单击删除按钮事件
+     */
+    function deleteAuthority() {
+        var selectRow = getCheckData();
+        //console.log(selectRow.length);
+        //转换一波JSON
+        selectRow = JSON.stringify(selectRow);
+        console.log(selectRow);
+        //传给后台
+        $.ajax({
+            url:"/manager/deletePermissionBySelect"
+            ,data:{"objectJson":selectRow}
+            ,success:function (data) {
+                console.log(data);
+            }
+            ,error:function () {
+                toastr.error("删除失败");
+            }
+        })
+    }
+
 </script>
 
 </body>

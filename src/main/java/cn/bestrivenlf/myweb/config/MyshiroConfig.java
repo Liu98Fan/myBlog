@@ -59,12 +59,16 @@ public class MyshiroConfig {
         filterChainDefinitionMap.put("/404.html","anon");
         filterChainDefinitionMap.put("/welcome.html","anon");
         filterChainDefinitionMap.put("/","anon");
+        filterChainDefinitionMap.put("/comment/getReplyListByCommentId","anon");
         filterChainDefinitionMap.put("/system/loginVerify","anon");
         filterChainDefinitionMap.put("/media/music/*","anon");
         filterChainDefinitionMap.put("/upload/markPic/*","anon");
+        filterChainDefinitionMap.put("/upload/noteResources/*","anon");
         filterChainDefinitionMap.put("/main/entrance","anon");
         filterChainDefinitionMap.put("/main.html","anon");
         filterChainDefinitionMap.put("/register.html","anon");
+        filterChainDefinitionMap.put("/note/entrance","authc");
+        filterChainDefinitionMap.put("/note/editor/**","authc");
         filterChainDefinitionMap.put("/note/**","anon");
         filterChainDefinitionMap.put("/pageResources/**","anon");
         filterChainDefinitionMap.put("/tools/saveMessage","authc");

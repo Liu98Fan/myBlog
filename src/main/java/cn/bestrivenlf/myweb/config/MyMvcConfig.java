@@ -23,6 +23,10 @@ public class MyMvcConfig implements WebMvcConfigurer {
     String accessPath;
     @Value("${file.uploadPath}")
     String uploadPath;
+    @Value("${file.noteResourceUploadPath}")
+    String noteResourceUploadPath;
+    @Value("${file.noteAccessPath}")
+    String noteAccessPath;
     @Value("${file.musicPath}")
     String musicPath;
     @Value("${file.musicAccessPath}")
@@ -56,6 +60,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(accessPath+"**").addResourceLocations("file:"+uploadPath);
         registry.addResourceHandler(musicAcessPath+"**").addResourceLocations("file:"+musicPath);
+        registry.addResourceHandler(noteAccessPath+"**").addResourceLocations("file:"+noteResourceUploadPath);
     }
 
     /**
