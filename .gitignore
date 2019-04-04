@@ -9,6 +9,11 @@
 .settings
 .springBeans
 .sts4-cache
+.gitignore
+myWebsite.sql
+
+### Files ###
+application.yml
 
 ### IntelliJ IDEA ###
 .idea

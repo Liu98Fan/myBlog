@@ -29,8 +29,8 @@ spring:
 
   mail:
     username: 214704958@qq.com
-    password: 
-    host: 
+    password: qdapmbwizqazbihe
+    host: smtp.qq.com
     properties:
       mail:
         smtp:
@@ -38,8 +38,8 @@ spring:
             enable: true
   rabbitmq:
     host: 120.78.209.159
-    username: 
-    password: 
+    username: guest
+    password: guest
   redis:
     host: 120.78.209.159
   messages:
@@ -54,8 +54,8 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-    username: 
-    password: 
+    username: myWebsite
+    password: 60085040
     url: jdbc:mysql://120.78.209.159:3306/myWebsite?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true
     #url: jdbc:mysql://localhost:3306/mywebsite?useUnicode=true&amp;characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver #指定驱动
@@ -77,13 +77,10 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+server:
+  port: 8081
 
 
 #    schema:
 #      - classpath:sql/department.sql
 #      - classpath:sql/employee.sql
-
-
-
-server:
-  port: 8082
